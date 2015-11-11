@@ -25,6 +25,8 @@ public class SpringAnnotationBeanNameGenerator extends AnnotationBeanNameGenerat
 		return super.buildDefaultBeanName(definition);
 	}
 
+
+
 //	@Override
 //	protected String determineBeanNameFromAnnotation(
 //			AnnotatedBeanDefinition arg0) {
