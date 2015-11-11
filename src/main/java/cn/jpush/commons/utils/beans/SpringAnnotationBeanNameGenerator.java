@@ -7,12 +7,12 @@ import org.springframework.util.ClassUtils;
 import java.beans.Introspector;
 
 /**
- * AnnotationBeanNameGenerator
+ * 自动命名 bean name
  * @author Roc
- * 	<context:component-scan base-package="cn.itcast.spring0401.jdbc.transaction.annotation"  name-generator="cn.itcast.spring0401.jdbc.transaction.annotation.RocAnnotationBeanNameGenerator"></context:component-scan>
+ * 	<context:component-scan base-package="cn.itcast.spring0401.jdbc.transaction.annotation"  name-generator="cn.itcast.spring0401.jdbc.transaction.annotation.SpringAnnotationBeanNameGenerator"></context:component-scan>
  *
  */
-public class RocAnnotationBeanNameGenerator extends AnnotationBeanNameGenerator {
+public class SpringAnnotationBeanNameGenerator extends AnnotationBeanNameGenerator {
 
 
 	@Override
