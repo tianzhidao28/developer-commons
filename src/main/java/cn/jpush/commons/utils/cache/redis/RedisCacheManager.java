@@ -9,7 +9,7 @@ import java.util.Map;
 import java.util.Set;
 
 /**
- * Redis缓存管理工具类
+ * 
  */
 public class RedisCacheManager {
 	private final Logger log = LoggerFactory.getLogger(RedisCacheManager.class);
@@ -79,6 +79,21 @@ public class RedisCacheManager {
 			JedisFactory.release(poolName, jedis);
 		}
 	}
+
+	/**
+	 *
+	 * @param key key pattern
+	 * @return
+	 */
+	public Set<String> keys(final String key) {
+		return new RedisExecutor<Set<String>>(){
+			@Override
+			Set<String> execute() {
+				return jedis.keys(key);
+			}
+		}.getResult();
+	}
+
 	/**
 	 * 入队
 	 * @param key 键(队列名)
@@ -166,6 +181,8 @@ public class RedisCacheManager {
 			}
 		}.getResult();
 	}
+
+
 	/**
 	 *
 	 * @param key
@@ -182,6 +199,22 @@ public class RedisCacheManager {
 	}
 
 
+	/**
+	 * Set
+	 * @param key
+	 * @param value
+	 * @return
+	 */
+	public String set(final String key , final String value) {
+		return new RedisExecutor<String>() {
+			@Override
+			String execute() {
+				return jedis.set(key,value);
+			}
+		}.getResult();
+	}
+
+
 	public String get(final String key) {
 		return new RedisExecutor<String>() {
 			@Override
@@ -190,6 +223,22 @@ public class RedisCacheManager {
 			}
 		}.getResult();
 	}
+
+
+	/**
+	 * 删除key
+	 * @param key
+	 * @return
+	 */
+	public Long del(final String key) {
+		return new RedisExecutor<Long>() {
+			@Override
+			Long execute() {
+				return jedis.del(key);
+			}
+		}.getResult();
+	}
+
 
 	public Long decrBy(final String key, final Long decValue) {
 		return new RedisExecutor<Long>(){
@@ -226,22 +275,33 @@ public class RedisCacheManager {
 	}
 
 
-    /**
-     * long == null 代表列表不存在
-     * @param key
-     * @return
-     */
-    public Long llen(final String key) {
-        return new RedisExecutor<Long>(){
-            @Override
-            Long execute() {
-                long retValue = jedis.llen(key);
-                log.info("[Redis({})] clientList = {}",poolName,retValue);
-                return retValue;
-            }
-        }.getResult();
-    }
+	/**
+	 * long == null 代表列表不存在
+	 * @param key
+	 * @return
+	 */
+	public Long llen(final String key) {
+		return new RedisExecutor<Long>(){
+			@Override
+			Long execute() {
+				long retValue = jedis.llen(key);
+				log.info("[Redis({})] clientList = {}",poolName,retValue);
+				return retValue;
+			}
+		}.getResult();
+	}
 
+
+	public Long pub(final byte[] topic ,final byte[] data) {
+		return new RedisExecutor<Long>(){
+			@Override
+			Long execute() {
+				Long retuVal = jedis.publish(topic,data);
+				log.info("[Redis({})] pub = {}", poolName, retuVal);
+				return retuVal;
+			}
+		}.getResult();
+	}
 
 	abstract class RedisExecutor<T> {
 		Jedis jedis;
