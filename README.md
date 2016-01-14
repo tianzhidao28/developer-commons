@@ -5,7 +5,11 @@
 ## usage :
 
 ```
-
+<dependency>
+  <groupId>cn.jpush</groupId>
+  <artifactId>developer-commons</artifactId>
+  <version>1.0</version>
+</dependency>
 
 
 ```
