@@ -8,7 +8,7 @@
 <dependency>
   <groupId>cn.jpush</groupId>
   <artifactId>developer-commons</artifactId>
-  <version>1.0</version>
+  <version>1.1</version>
 </dependency>
 
 
