@@ -29,24 +29,30 @@
 
 
 
-# dependency
+## dependency
 * apache-common-lang
 * guava
 
 
-# 功能
+## 功能
 
 * 缓存工具类 redis
 * 任务工具类 quartz job
 
 
-# 注意
+## 注意
 * 添加的 dependency : 可以设scope 为 <scope>provided</scope>；为使用者 按需引用
 * 为你自己使用的工具类 写测试用例: 以后谁改了,一定要通过测试用例 防止对你的项目产生影响
 
 
 
-# 已经在使用的项目
+## 已经在使用的项目
 `使用过的 可以将项目git或项目名 记录在下面,方便以后有合理变动时 适当通知下当事人`
 
 * data-api
+
+
+
+## update-log
+### 1.1
+* 增加hbase table tool
