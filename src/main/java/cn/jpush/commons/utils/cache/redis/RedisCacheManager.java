@@ -2,6 +2,7 @@ package cn.jpush.commons.utils.cache.redis;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 import redis.clients.jedis.Jedis;
 
 import java.util.HashMap;
@@ -182,7 +183,14 @@ public class RedisCacheManager {
 		}.getResult();
 	}
 
-
+	public Map<String, String> hgetAll(final String key ){
+	 return new RedisExecutor<Map<String, String>>(){
+        @Override
+        Map<String, String> execute() {
+            return jedis.hgetAll(key);
+        }
+    }.getResult(); 
+	}
 	/**
 	 *
 	 * @param key
