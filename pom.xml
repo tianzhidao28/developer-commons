@@ -6,7 +6,7 @@
 
     <groupId>cn.jpush</groupId>
     <artifactId>developer-commons</artifactId>
-    <version>1.1</version>
+    <version>1.2</version>
     <packaging>jar</packaging>
 
     <properties>
@@ -78,6 +78,7 @@
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
             <version>${junit.version}</version>
+            <scope>test</scope>
         </dependency>
 
 
@@ -262,6 +263,13 @@
             </snapshots>
         </repository>
     </repositories>
+
+    <distributionManagement>
+        <repository>
+            <id>jpush_maven</id>
+            <url>http://maven.jpushoa.com/nexus/content/repositories/jpush/</url>
+        </repository>
+    </distributionManagement>
 
 
 </project>

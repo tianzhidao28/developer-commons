@@ -14,7 +14,7 @@
 <dependency>
   <groupId>cn.jpush</groupId>
   <artifactId>developer-commons</artifactId>
-  <version>1.1</version>
+  <version>1.2</version>
 </dependency>
 
 
@@ -52,6 +52,8 @@
 * data-api
 
 
+## 发布命令
+* mvn deploy
 
 ## update-log
 ### 1.1
