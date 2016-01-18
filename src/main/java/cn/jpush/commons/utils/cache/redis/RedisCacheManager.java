@@ -100,7 +100,7 @@ public class RedisCacheManager {
 	 * @param key 键(队列名)
 	 * @param value 值
 	 */
-	public void push(String key, String value) {
+	public void lpush(String key, String value) {
 		Jedis jedis = null;
 		try {
 			jedis = getJedis();
@@ -126,6 +126,21 @@ public class RedisCacheManager {
 			}
 		}.getResult();
 	}
+
+	/**
+	 * 取出队列第一个,没删除数据
+	 * @param key 键(队列名)
+	 */
+	public String lindex(final String key) {
+		return new RedisExecutor<String>() {
+			@Override
+			String execute() {
+				return jedis.lindex(key,0);
+			}
+		}.getResult();
+	}
+
+
 
 
 
