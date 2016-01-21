@@ -14,7 +14,7 @@
 <dependency>
   <groupId>cn.jpush</groupId>
   <artifactId>developer-commons</artifactId>
-  <version>1.2</version>
+  <version>1.3.1</version>
 </dependency>
 
 

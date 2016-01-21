@@ -221,6 +221,20 @@ public class RedisCacheManager {
 		}.getResult();
 	}
 
+	/**
+	 * hash
+	 * @param key
+	 * @param fieldMap
+     * @return
+     */
+	public String hmset(final String key ,final HashMap<String,String>fieldMap){
+		return new RedisExecutor<String>(){
+			@Override
+			String execute() {
+				return jedis.hmset(key,fieldMap);
+			}
+		}.getResult();
+	}
 
 	/**
 	 * Set
