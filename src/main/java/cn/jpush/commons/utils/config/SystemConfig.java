@@ -41,19 +41,24 @@ public class SystemConfig
                 mConfig.load(new BufferedInputStream(new FileInputStream(System.getProperty("user.dir") + "/system-config.properties")));
                 LOG.info("successfully loaded custom properties.");
             }catch(Exception exp1){
-                File system = new File(System.getProperty("user.dir") + "/system.properties");
-                if(system.exists()) {
-                    mConfig.load(new BufferedInputStream(new FileInputStream(System.getProperty("user.dir") + "/system.properties")));
-                } else {
+
+
+
+                try{
+                    mConfig.load(SystemConfig.class.getClassLoader().getResourceAsStream("system-config.properties"));
+                    LOG.info("successfully loaded default properties.");
+                }catch(Exception exp2){
 
                     try{
-                        mConfig.load(SystemConfig.class.getClassLoader().getResourceAsStream("system-config.properties"));
+                        mConfig.load(SystemConfig.class.getClassLoader().getResourceAsStream("system.properties"));
                         LOG.info("successfully loaded default properties.");
-                    }catch(Exception exp2){
+                    }catch (Exception ex3) {
                         exp2.printStackTrace();
                         Thread.currentThread().stop();
                     }
+
                 }
+
 
             }
 

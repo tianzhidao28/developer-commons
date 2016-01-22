@@ -12,6 +12,6 @@ public class RedisCacheManagerTest {
     @Test
     public void testLlen() throws Exception {
         // 自动打开连接  关闭连接  不适合用在高并发的地方
-        // RedisCacheManager.getInstanse("xx").llen("111");
+        RedisCacheManager.getInstanse("phone-redis").llen("111");
     }
 }
