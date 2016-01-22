@@ -11,6 +11,7 @@
 ## usage :
 
 ```
+
 <dependency>
   <groupId>cn.jpush</groupId>
   <artifactId>developer-commons</artifactId>

@@ -9,6 +9,7 @@ import org.slf4j.LoggerFactory;
 import sun.security.util.PropertyExpander;
 
 import java.io.BufferedInputStream;
+import java.io.File;
 import java.io.FileInputStream;
 import java.util.Enumeration;
 import java.util.Map;
@@ -40,13 +41,20 @@ public class SystemConfig
                 mConfig.load(new BufferedInputStream(new FileInputStream(System.getProperty("user.dir") + "/system-config.properties")));
                 LOG.info("successfully loaded custom properties.");
             }catch(Exception exp1){
-                try{
-                    mConfig.load(SystemConfig.class.getClassLoader().getResourceAsStream("system-config.properties"));
-                    LOG.info("successfully loaded default properties.");
-                }catch(Exception exp2){
-                    exp2.printStackTrace();
-                    Thread.currentThread().stop();
+                File system = new File(System.getProperty("user.dir") + "/system.properties");
+                if(system.exists()) {
+                    mConfig.load(new BufferedInputStream(new FileInputStream(System.getProperty("user.dir") + "/system.properties")));
+                } else {
+
+                    try{
+                        mConfig.load(SystemConfig.class.getClassLoader().getResourceAsStream("system-config.properties"));
+                        LOG.info("successfully loaded default properties.");
+                    }catch(Exception exp2){
+                        exp2.printStackTrace();
+                        Thread.currentThread().stop();
+                    }
                 }
+
             }
 
             // Now expand system properties for properties in the
