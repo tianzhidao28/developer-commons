@@ -1,5 +1,6 @@
 package cn.jpush.commons.utils.cache.redis;
 
+import cn.jpush.commons.utils.io.SerializeUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -105,6 +106,24 @@ public class RedisCacheManager {
     }
 
     /**
+     * 设置超时时间
+     * @param key
+     * @param seconds
+     * @return
+     */
+    public Long expire(final String key, final int seconds ) {
+        return new RedisExecutor<Long>() {
+            @Override
+            Long execute() {
+                return jedis.expire(key,seconds);
+            }
+        }.getResult();
+    }
+
+
+
+
+    /**
      * 入队
      *
      * @param key   键(队列名)
@@ -140,18 +159,20 @@ public class RedisCacheManager {
     }
 
     /**
-     * 取出队列第一个,没删除数据
+     * 取出队列第一个,没删除数据,0代表第一个
      *
      * @param key 键(队列名)
      */
-    public String lindex(final String key) {
+    public String lindex(final String key,final int index) {
         return new RedisExecutor<String>() {
             @Override
             String execute() {
-                return jedis.lindex(key, 0);
+                return jedis.lindex(key, index);
             }
         }.getResult();
     }
+
+
 
 
     /**
@@ -291,6 +312,46 @@ public class RedisCacheManager {
             @Override
             String execute() {
                 return jedis.set(key, value);
+            }
+        }.getResult();
+    }
+
+    public String setex(final String key,final int seconds, final String value ) {
+        return new RedisExecutor<String>() {
+            @Override
+            String execute() {
+                return jedis.setex(key, seconds, value);
+            }
+        }.getResult();
+    }
+
+    /**
+     * jdk 序列化set
+     * @param key key.getBytes()
+     * @param seconds
+     * @param value 序列化
+     * @return
+     */
+    public String setObjectEx(final String key,final int seconds, final Object value ) {
+        return new RedisExecutor<String>() {
+            @Override
+            String execute() {
+                return jedis.setex(key.getBytes(), seconds ,SerializeUtils.serialize(value));
+            }
+        }.getResult();
+    }
+
+
+    /**
+     * 获取序列化存储的值
+     * @param key
+     * @return
+     */
+    public Object getObject(final String key) {
+        return new RedisExecutor<Object>() {
+            @Override
+            Object execute() {
+                return SerializeUtils.deserialize(jedis.get(key.getBytes()));
             }
         }.getResult();
     }
