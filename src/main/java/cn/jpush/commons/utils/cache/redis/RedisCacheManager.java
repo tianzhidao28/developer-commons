@@ -196,6 +196,7 @@ public class RedisCacheManager {
     }
 
     /**
+     * sorted set 增加元素
      * @param key
      * @param score
      * @param member
