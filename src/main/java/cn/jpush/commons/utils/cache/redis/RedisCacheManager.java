@@ -405,6 +405,16 @@ public class RedisCacheManager {
         }.getResult();
     }
 
+    public Long incr(final String key) {
+        return new RedisExecutor<Long>() {
+            @Override
+            Long execute() {
+                Long retValue = jedis.incr(key);
+                log.info("[Redis] decr key={},newValue={}", key, retValue);
+                return retValue;
+            }
+        }.getResult();
+    }
 
     public String clientList() {
         return new RedisExecutor<String>() {
