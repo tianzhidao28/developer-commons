@@ -1,7 +1,7 @@
 
 ## wecome
 * 欢迎 fork 或 直接 提交代码 增加更多的工具类 和改进
-
+* 以后 奇数作为测试版 偶数为测试版上线后发布的; eg:1.2.1增加了 es tools ,而后测试稳定后 发布1.2.2
 
 ## `注意事项：`
 * `1. 每次提交请填写 详细的修改注释`
@@ -15,7 +15,7 @@
 <dependency>
   <groupId>cn.jpush</groupId>
   <artifactId>developer-commons</artifactId>
-  <version>1.3.6</version>
+  <version>1.3.7</version>
 </dependency>
 
 
@@ -47,6 +47,20 @@
 
 
 
+## 使用方法:
+
+> 在 classpath:下面的 system-config.properties (优先) 或者system.properties文件里 加入如下配置
+```
+
+
+
+
+
+
+```
+
+
+
 ## 已经在使用的项目
 `使用过的 可以将项目git或项目名 记录在下面,方便以后有合理变动时 适当通知下当事人`
 
@@ -56,6 +70,3 @@
 ## 发布命令
 * mvn deploy
 
-## update-log
-### 1.1
-* 增加hbase table tool
