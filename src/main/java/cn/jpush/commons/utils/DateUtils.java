@@ -15,6 +15,91 @@ import java.util.List;
 public class DateUtils {
 
 
+
+    /**
+     * 获取指定日期的1日0时0分0秒
+     *
+     * @param date
+     *            需要处理的日期
+     * @return 当月的1日
+     */
+    public static Date getFirstDateOfMonth(Date date) {
+        Calendar c = Calendar.getInstance();
+        c.setTime(date);
+        c.set(Calendar.DAY_OF_MONTH, 1);
+        c.set(Calendar.HOUR_OF_DAY, 0);
+        c.set(Calendar.MINUTE, 0);
+        c.set(Calendar.SECOND, 0);
+        c.set(Calendar.MILLISECOND, 0);
+        return c.getTime();
+    }
+
+    /**
+     * 获取指定日期当月最后一天的23:59:59时间点
+     *
+     * @param date
+     *            需要处理的日期
+     * @return 当月的最后一天
+     */
+    public static Date getLastDateOfMonth(Date date) {
+        Calendar c = Calendar.getInstance();
+        c.setTime(date);
+        c.set(Calendar.MONTH, c.get(Calendar.MONTH) + 1);
+        c.set(Calendar.DAY_OF_MONTH, 0);
+        c.set(Calendar.HOUR_OF_DAY, 23);
+        c.set(Calendar.MINUTE, 59);
+        c.set(Calendar.SECOND, 59);
+        c.set(Calendar.MILLISECOND, 999);
+        return c.getTime();
+    }
+
+    /**
+     * 获取指定日期的1月1日0时0分0秒
+     *
+     * @param date
+     *            需要处理的日期
+     * @return 当月的1月1日
+     */
+    public static Date getFirstDateOfYear(Date date) {
+        Calendar c = Calendar.getInstance();
+        c.setTime(date);
+        c.set(Calendar.DAY_OF_YEAR, 1);
+        return c.getTime();
+    }
+
+    /**
+     * 获取指定日期的00:00:00时间点
+     *
+     * @param date
+     *            待获取时间点的时间
+     * @return 某日期的00:00:00
+     */
+    public static Date getTheStartOfDay(Date date) {
+        Calendar c = Calendar.getInstance();
+        c.setTime(date);
+        c.set(Calendar.HOUR_OF_DAY, 0);
+        c.set(Calendar.MINUTE, 0);
+        c.set(Calendar.SECOND, 0);
+        return c.getTime();
+    }
+
+    /**
+     * 获取指定日期的23:59:59时间点
+     *
+     * @param date
+     *            待获取时间点的时间
+     * @return 某日期的23:59:59
+     */
+    public static Date getTheEndOfDay(Date date) {
+        Calendar c = Calendar.getInstance();
+        c.setTime(date);
+        c.set(Calendar.HOUR_OF_DAY, 23);
+        c.set(Calendar.MINUTE, 59);
+        c.set(Calendar.SECOND, 59);
+        return c.getTime();
+    }
+
+
     public static Date parseDate(String dateStr, String pattern) {
         if (StringUtils.isEmpty(dateStr)) {
             return null;

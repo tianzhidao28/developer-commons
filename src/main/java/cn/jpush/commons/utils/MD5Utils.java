@@ -1,4 +1,4 @@
-package cn.jpush.commons.utils.cache;
+package cn.jpush.commons.utils;
 
 import java.security.MessageDigest;
 
