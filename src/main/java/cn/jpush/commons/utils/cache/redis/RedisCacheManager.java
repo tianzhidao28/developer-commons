@@ -399,7 +399,7 @@ public class RedisCacheManager {
             @Override
             Long execute() {
                 Long retValue = jedis.incrBy(key, decValue);
-                log.info("[Redis] decr key={},decrValue={},newValue={}", key, decValue, retValue);
+                log.info("[Redis] incrBy key={},decrValue={},newValue={}", key, decValue, retValue);
                 return retValue;
             }
         }.getResult();
@@ -410,6 +410,17 @@ public class RedisCacheManager {
             @Override
             Long execute() {
                 Long retValue = jedis.incr(key);
+                log.info("[Redis] incr key={},newValue={}", key, retValue);
+                return retValue;
+            }
+        }.getResult();
+    }
+
+    public Long decr(final String key) {
+        return new RedisExecutor<Long>() {
+            @Override
+            Long execute() {
+                Long retValue = jedis.decr(key);
                 log.info("[Redis] decr key={},newValue={}", key, retValue);
                 return retValue;
             }

@@ -39,7 +39,7 @@
 
         <httpclient_version>4.2.1</httpclient_version>
         <hessian_lite_version>3.2.1-fixed-2</hessian_lite_version>
-        <fastjson_version>1.2.4</fastjson_version>
+        <fastjson.version>1.2.7</fastjson.version>
         <bsf_version>3.1</bsf_version>
         <sorcerer_version>0.8</sorcerer_version>
         <zookeeper_version>3.4.6</zookeeper_version>
@@ -90,6 +90,19 @@
             <version>${commons-lang3.version}</version>
         </dependency>
 
+        <!-- fastjson -->
+        <dependency>
+            <groupId>com.alibaba</groupId>
+            <artifactId>fastjson</artifactId>
+            <version>${fastjson.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.google.guava</groupId>
+            <artifactId>guava</artifactId>
+            <version>${guava.version}</version>
+        </dependency>
+
         <!-- log4j 1.2.17  slf4j 1.7.5-->
         <dependency>
             <groupId>log4j</groupId>
@@ -110,13 +123,6 @@
             <version>${slf4j.version}</version>
             <scope>provided</scope>
         </dependency>
-
-        <dependency>
-            <groupId>com.google.guava</groupId>
-            <artifactId>guava</artifactId>
-            <version>${guava.version}</version>
-        </dependency>
-
 
         <!-- Quartz -->
         <dependency>

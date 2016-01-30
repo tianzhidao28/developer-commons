@@ -1,7 +1,7 @@
 package cn.jpush.commons.utils.web;
 
 /**
- * 统一的API返回对象
+ * 可以作为统一的API返回对象
  * @author admin@rocyuan.com
  * @date 2015-7-29
  * @desc
