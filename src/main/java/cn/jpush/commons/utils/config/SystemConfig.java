@@ -38,7 +38,7 @@ public class SystemConfig
         try
         {
             try{
-                mConfig.load(new BufferedInputStream(new FileInputStream(System.getProperty("user.dir") + "/system-config.properties")));
+                mConfig.load(new BufferedInputStream(new FileInputStream(System.getProperty("user.dir") +File.separator+ "system-config.properties")));
                 LOG.info("successfully loaded custom properties.");
             }catch(Exception exp1){
 

@@ -31,7 +31,7 @@ public class CouchBaseManager {
      * 失败的话 就重连
      * @param timesNum 重连的次数
      */
-    public static CouchbaseClient initCouchbaseClientWithReTry(String couchbaseName , int timesNum) {
+    public static synchronized CouchbaseClient initCouchbaseClientWithReTry(String couchbaseName , int timesNum) {
 
         for ( int times = 0 ; times < timesNum ; ++times ) {
             CouchbaseClient client = initCouchbaseClient(couchbaseName);
@@ -106,7 +106,12 @@ public class CouchBaseManager {
     }
 
     public static void shutdown(String couchbaseName) {
-        couchbaseClientMap.get(couchbaseName).shutdown(3, TimeUnit.MINUTES);
+        CouchbaseClient client = couchbaseClientMap.get(couchbaseName);
+        if(client != null) {
+            client.shutdown(3, TimeUnit.MINUTES);
+            couchbaseClientMap.remove(couchbaseName);
+        }
+
     }
 
 

@@ -6,7 +6,7 @@
 
     <groupId>cn.jpush</groupId>
     <artifactId>developer-commons</artifactId>
-    <version>1.3.9</version>
+    <version>1.4.1</version>
     <packaging>jar</packaging>
 
     <properties>
@@ -29,9 +29,9 @@
         <!--
         <spring.version>4.0.5.RELEASE</spring.version>
         -->
-        <spring.version>4.0.9.RELEASE</spring.version>
+        <spring.version>4.1.3.RELEASE</spring.version>
 
-        <dubbo.version>2.8.3</dubbo.version>
+        <dubbo.version>2.5.3</dubbo.version>
 
         <validation.version>1.0.0.GA</validation.version>
         <hibernate.validator.version>4.2.0.Final</hibernate.validator.version>
@@ -146,12 +146,6 @@
             <scope>provided</scope>
         </dependency>
 
-        <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-web</artifactId>
-            <version>${spring.version}</version>
-            <scope>provided</scope>
-        </dependency>
 
         <dependency>
             <groupId>org.springframework</groupId>
@@ -163,6 +157,12 @@
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-context-support</artifactId>
+            <version>${spring.version}</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-web</artifactId>
             <version>${spring.version}</version>
             <scope>provided</scope>
         </dependency>
@@ -183,11 +183,6 @@
             <version>${validation.version}</version>
             <scope>provided</scope>
         </dependency>
-
-
-
-
-
 
 
         <!-- cache begin -->
@@ -299,13 +294,23 @@
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-test</artifactId>
-            <version>4.0.9.RELEASE</version>
+            <version>${spring.version}</version>
+            <scope>test</scope>
         </dependency>
+
         <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-test</artifactId>
-            <version>4.0.9.RELEASE</version>
+            <groupId>com.alibaba</groupId>
+            <artifactId>dubbo</artifactId>
+            <version>2.5.3</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.springframework</groupId>
+                    <artifactId>spring</artifactId>
+                </exclusion>
+            </exclusions>
+            <scope>provided</scope>
         </dependency>
+
 
 
     </dependencies>

@@ -10,12 +10,14 @@
 
 ## usage :
 
+* 如果用在restful项目里,建议用4.1以上的spring版本
+
 ```
 
 <dependency>
   <groupId>cn.jpush</groupId>
   <artifactId>developer-commons</artifactId>
-  <version>1.3.9</version>
+  <version>1.4.0</version>
 </dependency>
 
 ```
@@ -38,6 +40,13 @@
 
 * 缓存工具类 redis
 * 任务工具类 quartz job
+* 增加 JSONUtils类
+* 增加 MD5工具类
+* 增加 验证 InStr  判断字符串在那几个字符串之中
+* 增加 IP获取类
+* 增加几个获取 时间相关的工具
+* 增加SpringMVC 中通过注解获取request attr的工具
+* 增加 CounchBase 超时次数达到20次时 自动断开重练
 
 
 ## 注意
