@@ -1,4 +1,4 @@
-package cn.jpush.commons.utils.test;
+package cn.jpush.commons.utils;
 
 import org.springframework.util.StopWatch;
 
