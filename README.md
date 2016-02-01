@@ -43,11 +43,12 @@
 * 任务工具类 quartz job
 * 增加 JSONUtils类
 * 增加 MD5工具类
-* 增加 验证 InStr  判断字符串在那几个字符串之中
+* 增加 验证 InStr  判断字符串在那几个字符串之中(Hibernate Valid 校验工具类)
 * 增加 IP获取类
 * 增加几个获取 时间相关的工具
 * 增加SpringMVC 中通过注解获取request attr的工具
-* 增加 CounchBase 超时次数达到20次时 自动断开重练
+* 增加 CounchBase 超时次数达到20次时 自动断开重练(CouchBaseUtils.getData("app-stats","key");这个用法)
+* 增加 HBase 相关工具类的更新 HInterface-替换为Table
 
 
 ## 注意
