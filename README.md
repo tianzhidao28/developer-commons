@@ -33,8 +33,9 @@
 
 
 ## dependency
-* apache-common-lang
+* common-lang3
 * guava
+* fastjson
 
 
 ## 功能
@@ -49,6 +50,7 @@
 * 增加SpringMVC 中通过注解获取request attr的工具
 * 增加 CounchBase 超时次数达到20次时 自动断开重练(CouchBaseUtils.getData("app-stats","key");这个用法)
 * 增加 HBase 相关工具类的更新 HInterface-替换为Table
+
 
 
 ## 注意

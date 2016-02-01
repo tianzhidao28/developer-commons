@@ -87,8 +87,10 @@ public class CouchBaseUtils {
 			cnt.set(0);
 			errCntsMap.put(couchBaseName,cnt);
 			LOG.info("cb {} has reconnection... ",couchBaseName);
+		} else {
+
+			errCntsMap.put(couchBaseName,cnt);
 		}
-		errCntsMap.put(couchBaseName,cnt);
 	}
 
 }

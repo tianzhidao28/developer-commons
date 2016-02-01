@@ -10,5 +10,9 @@
 * 增加几个获取 时间相关的工具
 * 增加SpringMVC 中通过注解获取request attr的工具
 
+### 1.4.1
+* * 增加 HBase 相关工具类的更新 HInterface-替换为Table
+* 删掉HBase Manager 类
+
 
 
