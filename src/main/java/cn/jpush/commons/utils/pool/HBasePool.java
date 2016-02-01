@@ -17,7 +17,7 @@ public class HBasePool {
 
     private static GenericObjectPoolConfig hbaseConfig = new GenericObjectPoolConfig();
     
-    private Map<String, ObjectPool<Table>> poolMap = new HashMap<>();
+    private static Map<String, ObjectPool<Table>> poolMap = new HashMap<>();
 
     static {
         hbaseConfig.setMaxTotal(SystemConfig.getIntProperty("hbase.max.total"));
@@ -28,7 +28,7 @@ public class HBasePool {
         LOG.info("init hbase config success!");
     }
 
-    public void register(String tableName) {
+    public static void register(String tableName) {
         try{
             ObjectPool<Table> hbasePool = new GenericObjectPool<>(new HBaseFactory(tableName), hbaseConfig);
             poolMap.put(tableName, hbasePool);
@@ -38,7 +38,7 @@ public class HBasePool {
         }
     }
     
-    public Table getTable(String tableName) {
+    public static Table getTable(String tableName) {
         if( !poolMap.containsKey(tableName) ) {
             register(tableName);
         }
@@ -50,7 +50,7 @@ public class HBasePool {
         }
     }
     
-    public void returnTable(String tableName, Table table) {
+    public static void returnTable(String tableName, Table table) {
         try {
             poolMap.get(tableName).returnObject(table);
         } catch (Exception e) {
@@ -58,7 +58,7 @@ public class HBasePool {
         }
     }
     
-    public void destroyTable(String tableName, Table table) {
+    public static void destroyTable(String tableName, Table table) {
         try {
             poolMap.get(tableName).invalidateObject(table);
         } catch (Exception e) {
