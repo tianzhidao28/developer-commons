@@ -64,6 +64,12 @@ app-stats.couchbase.host=192.168.249.124:8091,192.168.249.193:8091
 app-stats.couchbase.bucket=appxxxxxx
 app-stats.couchbase.pass=Apxxxxxxxxx
 
+
+CouchBaseUtils.getData("app-stats","key");
+CouchBaseUtils.getObjectData("app-stats","你的key");
+
+
+
 ```
 
 

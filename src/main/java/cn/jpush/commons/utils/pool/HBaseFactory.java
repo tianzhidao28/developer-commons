@@ -5,65 +5,47 @@ import org.apache.commons.pool2.PooledObject;
 import org.apache.commons.pool2.impl.DefaultPooledObject;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.hbase.HBaseConfiguration;
-import org.apache.hadoop.hbase.client.HConnection;
-import org.apache.hadoop.hbase.client.HConnectionManager;
-import org.apache.hadoop.hbase.client.HTableInterface;
+import org.apache.hadoop.hbase.TableName;
+import org.apache.hadoop.hbase.client.Connection;
+import org.apache.hadoop.hbase.client.ConnectionFactory;
+import org.apache.hadoop.hbase.client.Table;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class HBaseFactory extends BasePooledObjectFactory<HTableInterface> {
+public class HBaseFactory extends BasePooledObjectFactory<Table>{
     
     private static Logger LOG = LoggerFactory.getLogger(HBaseFactory.class);
     
-    private static Configuration conf;
-    private static HConnection connection;
+    private static Configuration conf = HBaseConfiguration.create();
 
-    private final String tableName;
+    private final String tableQualifier;
 
-    public HBaseFactory(String tableName) {
-        this.tableName = tableName;
-    }
-
-    static {
-        initConnection();
-    }
-    
-    public static void initConnection() {
-        try {
-            conf = HBaseConfiguration.create();
-            long start = System.currentTimeMillis();
-            connection = HConnectionManager.createConnection(conf);
-            long end = System.currentTimeMillis();
-            LOG.info("init hbase connection cost " + (end - start));
-        } catch (Exception e) {
-            LOG.error("hbase create connection error", e);
-        }
+    public HBaseFactory(String tableQualifier) {
+        this.tableQualifier = tableQualifier;
     }
 
     @Override
-    public HTableInterface create() throws Exception {
-        HTableInterface hTable = null;
+    public Table create() throws Exception {
+        Table table = null;
         try {
             long start = System.currentTimeMillis();
-            if (connection == null || connection.isAborted() || connection.isClosed()) {
-                initConnection();
-            }
-            hTable = connection.getTable(tableName);
+            Connection connection = ConnectionFactory.createConnection(conf);
+            table = connection.getTable(TableName.valueOf(tableQualifier));
             long end = System.currentTimeMillis();
-            LOG.info("init hbase table cost " + (end - start));
+            LOG.info("create hbase table connection {} cost {}", tableQualifier, (end - start));
         } catch (Exception e) {
-            LOG.error("hbase create table error", e);
+            LOG.error("Failed to create hbase table connection " + tableQualifier, e);
         }
-        return hTable;
+        return table;
     }
 
     @Override
-    public PooledObject<HTableInterface> wrap(HTableInterface table) {
+    public PooledObject<Table> wrap(Table table) {    
         return new DefaultPooledObject<>(table);
     }
 
     @Override
-    public void destroyObject(PooledObject<HTableInterface> p) throws Exception {
+    public void destroyObject(PooledObject<Table> p) throws Exception {
         LOG.info("hbase table close");
         try {
             p.getObject().close();

@@ -13,6 +13,7 @@ import java.util.concurrent.atomic.AtomicInteger;
  * couchbase工具类，用于提供获取cb的client连接
  */
 public class CouchBaseUtils {
+
 	private static final Logger LOG = LoggerFactory.getLogger(CouchBaseUtils.class);
 
 	/**

@@ -21,7 +21,7 @@ public class CBPool {
 
     static {
         config = new GenericObjectPoolConfig();
-        config.setMaxTotal(SystemConfig.getIntProperty("couchbase.max.total",400));
+        config.setMaxTotal(SystemConfig.getIntProperty("couchbase.max.total",800));
         config.setMaxIdle(SystemConfig.getIntProperty("couchbase.max.idle",100));
         config.setMinIdle(SystemConfig.getIntProperty("couchbase.min.idle",50));
         config.setMinEvictableIdleTimeMillis(SystemConfig.getIntProperty("couchbase.minEvictableIdleTimeMillis",300000));

@@ -7,10 +7,12 @@ import com.couchbase.client.CouchbaseClient;
 import com.couchbase.client.CouchbaseConnectionFactory;
 import com.couchbase.client.CouchbaseConnectionFactoryBuilder;
 import net.spy.memcached.ConnectionFactoryBuilder;
+import net.spy.memcached.ConnectionObserver;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
+import java.net.SocketAddress;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -31,12 +33,23 @@ public class CouchBaseManager {
      * 失败的话 就重连
      * @param timesNum 重连的次数
      */
-    public static synchronized CouchbaseClient initCouchbaseClientWithReTry(String couchbaseName , int timesNum) {
+    public static synchronized CouchbaseClient initCouchbaseClientWithReTry(final String couchbaseName , int timesNum) {
 
         for ( int times = 0 ; times < timesNum ; ++times ) {
             CouchbaseClient client = initCouchbaseClient(couchbaseName);
             if (client != null) {
-                LOG.info("Couchbase[{}{} times] connect OK !",couchbaseName,times);
+                LOG.info(" Couchbase[{}{} times] connect OK !",couchbaseName,times);
+                client.addObserver(new ConnectionObserver() {
+                    @Override
+                    public void connectionEstablished(SocketAddress socketAddress, int i) {
+                        LOG.info("Couchbase[{},{}] reconnected ",couchbaseName,socketAddress.toString());
+                    }
+
+                    @Override
+                    public void connectionLost(SocketAddress socketAddress) {
+                        LOG.warn(" Couchbase[{},{}] lost ",couchbaseName,socketAddress.toString());
+                    }
+                });
                 return client;
             }
             continue;
@@ -56,7 +69,7 @@ public class CouchBaseManager {
     }
 
 
-    public static CouchbaseClient initCouchbaseClient(String couchbaseName) {
+    public static CouchbaseClient initCouchbaseClient(final String couchbaseName) {
         String serverAddress = SystemConfig.getProperty(couchbaseName
                 + ".couchbase.host");
         String bucket = SystemConfig.getProperty(couchbaseName
@@ -81,6 +94,17 @@ public class CouchBaseManager {
             CouchbaseConnectionFactory cf = ccfb.buildCouchbaseConnection(
                     serverList, bucket, pwd);
             client = new CouchbaseClient(cf);
+            client.addObserver(new ConnectionObserver() {
+                @Override
+                public void connectionEstablished(SocketAddress socketAddress, int i) {
+                    LOG.info("Couchbase[{},{}] reconnected ",couchbaseName,socketAddress.toString());
+                }
+
+                @Override
+                public void connectionLost(SocketAddress socketAddress) {
+                    LOG.warn(" Couchbase[{},{}] lost ",couchbaseName,socketAddress.toString());
+                }
+            });
         } catch (IOException e) {
             LOG.error(String
                     .format("get CouchbaseClient Exception,host[%s],bucket[%s],pwd[%s].",
