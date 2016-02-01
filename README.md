@@ -70,6 +70,7 @@ CouchBaseUtils.getObjectData("app-stats","你的key");
 
 
 
+Hbase 相关的操作 用pool 下的新版
 ```
 
 
