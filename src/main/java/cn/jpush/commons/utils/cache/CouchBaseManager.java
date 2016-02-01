@@ -132,8 +132,13 @@ public class CouchBaseManager {
     public static void shutdown(String couchbaseName) {
         CouchbaseClient client = couchbaseClientMap.get(couchbaseName);
         if(client != null) {
-            client.shutdown(3, TimeUnit.MINUTES);
-            couchbaseClientMap.remove(couchbaseName);
+            try{
+                client.shutdown(1, TimeUnit.MINUTES);
+                couchbaseClientMap.remove(couchbaseName);
+            }catch (Exception e){
+                LOG.error("close counchbase client exception,counchbaseName={} ",couchbaseName);
+            }
+
         }
 
     }
