@@ -1,11 +1,17 @@
 package cn.jpush.commons.utils.web;
 
+import cn.jpush.commons.utils.JSONUtils;
+import com.google.common.collect.ImmutableListMultimap;
+import com.google.common.collect.ImmutableMap;
+import org.apache.htrace.fasterxml.jackson.annotation.JsonInclude;
+
 /**
  * 可以作为统一的API返回对象
  * @author admin@rocyuan.com
  * @date 2015-7-29
  * @desc
  */
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class APIResult<T> {
     public Integer code ;
     public String message ;
@@ -67,7 +73,8 @@ public class APIResult<T> {
 
 
     public  String toErrJson() {
-        return String.format("{\"code\":%s,\"message\":\"%s\"}", code,message);
+        ImmutableMap map = ImmutableMap.of("code",code,"message",message);
+        return JSONUtils.toString(map);
     }
 
 

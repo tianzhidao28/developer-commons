@@ -97,3 +97,8 @@ Hbase 相关的操作 用pool 下的新版
 ## 发布命令
 * mvn deploy
 
+
+## 异常code
+```
+84	公共组建异常	Blocker	JAVA公共组件异常	SOA	developer-commons公共组件	微信,抑制
+```

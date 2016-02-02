@@ -1,6 +1,7 @@
 package cn.jpush.commons.utils.pool;
 
 
+import cn.jpush.alarm.AlarmClient;
 import cn.jpush.commons.utils.config.SystemConfig;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.pool2.BasePooledObjectFactory;
@@ -58,6 +59,7 @@ public class ESFactory extends BasePooledObjectFactory<Client> {
             p.getObject().close();
         } catch (Exception e) {
             LOG.error("destroy es client error", e);
+            AlarmClient.send(84,String.format("[ES:clusterName:%s,esAddressList:%s] pool destroy ",clusterName,StringUtils.join(esAddressList)));
         }
         
     }
@@ -75,6 +77,7 @@ public class ESFactory extends BasePooledObjectFactory<Client> {
             client.addTransportAddresses(addresses);
         } catch (Exception e) {
             LOG.error("Failed to create client.", e);
+            AlarmClient.send(84,"[ES] exception createClient"+e.getMessage());
         }
         return client;
     }
@@ -89,6 +92,8 @@ public class ESFactory extends BasePooledObjectFactory<Client> {
                 LOG.info("add " + esAddressList[i]);
             } catch (UnknownHostException e) {
                 LOG.error("Failed to add address " + esAddressList[i], e);
+                AlarmClient.send(84,String.format("[ES:(%s:%s)] UnknownHostException ",addr[0],addr[1]));
+
             }
         }
         return addresses;

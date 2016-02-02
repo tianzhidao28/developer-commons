@@ -1,5 +1,6 @@
 package cn.jpush.commons.utils.pool;
 
+import cn.jpush.alarm.AlarmClient;
 import cn.jpush.commons.utils.config.SystemConfig;
 import com.couchbase.client.CouchbaseClient;
 import org.apache.commons.pool2.ObjectPool;
@@ -34,7 +35,7 @@ public class CBPool {
             poolMap.put(key, pool);
             LOG.info("register couchbase pool key={} successfully!",key);
         } catch (Exception e) {
-            LOG.error("init hbase pool error", e);
+            LOG.error("init cb pool error", e);
         }
     }
 
@@ -46,6 +47,8 @@ public class CBPool {
             return poolMap.get(key).borrowObject();
         } catch (Exception e) {
             LOG.error("Failed to get connection " + key, e);
+            AlarmClient.send(84,String.format("[CB:%s] poolMap.get init error ",key));
+
         }
         return null;
     }
@@ -63,6 +66,7 @@ public class CBPool {
             poolMap.get(key).invalidateObject(client);
         } catch (Exception e) {
             LOG.error("Failed to destroy client " + key, e);
+            AlarmClient.send(84,String.format("[CB:%s] poolMap.get invalidateObject error ",key));
         }
     }
 }

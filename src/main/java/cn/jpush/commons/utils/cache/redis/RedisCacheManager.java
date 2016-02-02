@@ -1,10 +1,12 @@
 package cn.jpush.commons.utils.cache.redis;
 
+import cn.jpush.alarm.AlarmClient;
 import cn.jpush.commons.utils.io.SerializeUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import redis.clients.jedis.Jedis;
+import redis.clients.jedis.exceptions.JedisConnectionException;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -487,10 +489,17 @@ public class RedisCacheManager {
             T result = null;
             try {
                 result = execute();
+            } catch (JedisConnectionException e) {
+                JedisFactory.realeaseBroken(poolName, jedis);
+
+                log.error("[Redis] [poolName = {}] 执行命令时异常 ", poolName, e);
+                AlarmClient.send(84,String.format("[redis:%s]JedisConnectionException:%s",poolName,e.getMessage()));
             } catch (Throwable e) {
                 JedisFactory.realeaseBroken(poolName, jedis);
                 log.error("[Redis] [poolName = {}] 执行命令时异常 ", poolName, e);
-            } finally {
+                AlarmClient.send(84,String.format("[redis:%s]Jedis操作异常:%s",poolName,e.getMessage()));
+
+            }finally {
                 JedisFactory.release(poolName, jedis);
             }
             return result;

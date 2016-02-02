@@ -1,5 +1,6 @@
 package cn.jpush.commons.utils.pool;
 
+import cn.jpush.alarm.AlarmClient;
 import cn.jpush.commons.utils.config.SystemConfig;
 import com.couchbase.client.CouchbaseClient;
 import com.couchbase.client.CouchbaseConnectionFactory;
@@ -45,6 +46,7 @@ public class CBFactory extends BasePooledObjectFactory<CouchbaseClient> {
             p.getObject().shutdown();
         } catch(Exception e) {
             LOG.error("cb shutdown error", e);
+            AlarmClient.send(84,String.format("[CB:{}:{}] shutdown error ",serverList,bucket));
         }
     }
 
@@ -72,8 +74,10 @@ public class CBFactory extends BasePooledObjectFactory<CouchbaseClient> {
         } catch (IOException e) {
             LOG.error(String.format("get CouchbaseClient Exception,host[%s],bucket[%s],pwd[%s].", serverAddress,
                     bucket, pwd));
+            AlarmClient.send(84,String.format("[CB:%s:%s] init error ",serverList,bucket));
         } catch (Exception e) {
             LOG.error("Init couchbase clien error " + couchbaseName, e);
+            AlarmClient.send(84,String.format("[CB:%s:%s] init error ",serverList,bucket));
         }
         long end = System.currentTimeMillis();
         LOG.info("init cb cost " + couchbaseName + " cost " + (end - start));

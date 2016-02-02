@@ -1,5 +1,6 @@
 package cn.jpush.commons.utils.pool;
 
+import cn.jpush.alarm.AlarmClient;
 import org.apache.commons.pool2.BasePooledObjectFactory;
 import org.apache.commons.pool2.PooledObject;
 import org.apache.commons.pool2.impl.DefaultPooledObject;
@@ -35,6 +36,7 @@ public class HBaseFactory extends BasePooledObjectFactory<Table>{
             LOG.info("create hbase table connection {} cost {}", tableQualifier, (end - start));
         } catch (Exception e) {
             LOG.error("Failed to create hbase table connection " + tableQualifier, e);
+            AlarmClient.send(84,"[HBase]Failed to create hbase table connection " + tableQualifier);
         }
         return table;
     }
