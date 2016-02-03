@@ -14,5 +14,9 @@
 * * 增加 HBase 相关工具类的更新 HInterface-替换为Table
 * 删掉HBase Manager 类
 
+### 1.4.2
+* HBase dependency bug fixed
+* HBase connection bug fixed
+
 
 
