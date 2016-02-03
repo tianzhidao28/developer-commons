@@ -1,6 +1,5 @@
 package cn.jpush.commons.utils.pool;
 
-import cn.jpush.alarm.AlarmClient;
 import org.apache.commons.pool2.BasePooledObjectFactory;
 import org.apache.commons.pool2.PooledObject;
 import org.apache.commons.pool2.impl.DefaultPooledObject;
@@ -13,16 +12,33 @@ import org.apache.hadoop.hbase.client.Table;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class HBaseFactory extends BasePooledObjectFactory<Table>{
-    
+public class HBaseFactory extends BasePooledObjectFactory<Table> {
+
     private static Logger LOG = LoggerFactory.getLogger(HBaseFactory.class);
-    
+
     private static Configuration conf = HBaseConfiguration.create();
 
     private final String tableQualifier;
+    private static Connection connection;
 
     public HBaseFactory(String tableQualifier) {
         this.tableQualifier = tableQualifier;
+    }
+
+    static {
+        initConnection();
+    }
+
+    public static void initConnection() {
+        try {
+            conf = HBaseConfiguration.create();
+            long start = System.currentTimeMillis();
+            connection = ConnectionFactory.createConnection(conf);
+            long end = System.currentTimeMillis();
+            LOG.info("init hbase connection cost " + (end - start));
+        } catch (Exception e) {
+            LOG.error("hbase create connection error", e);
+        }
     }
 
     @Override
@@ -30,19 +46,21 @@ public class HBaseFactory extends BasePooledObjectFactory<Table>{
         Table table = null;
         try {
             long start = System.currentTimeMillis();
-            Connection connection = ConnectionFactory.createConnection(conf);
+//            Connection connection = ConnectionFactory.createConnection(conf);
+            if (connection == null || connection.isAborted() || connection.isClosed()) {
+                initConnection();
+            }
             table = connection.getTable(TableName.valueOf(tableQualifier));
             long end = System.currentTimeMillis();
             LOG.info("create hbase table connection {} cost {}", tableQualifier, (end - start));
         } catch (Exception e) {
             LOG.error("Failed to create hbase table connection " + tableQualifier, e);
-            AlarmClient.send(84,"[HBase]Failed to create hbase table connection " + tableQualifier);
         }
         return table;
     }
 
     @Override
-    public PooledObject<Table> wrap(Table table) {    
+    public PooledObject<Table> wrap(Table table) {
         return new DefaultPooledObject<>(table);
     }
 
@@ -54,6 +72,6 @@ public class HBaseFactory extends BasePooledObjectFactory<Table>{
         } catch (Exception e) {
             LOG.error("hbase close error", e);
         }
-        
+
     }
 }

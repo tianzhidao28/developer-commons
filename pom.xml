@@ -240,6 +240,7 @@
                     <artifactId>log4j</artifactId>
                 </exclusion>
             </exclusions>
+            <scope>provided</scope>
         </dependency>
 
         <!-- hbase utils 相关结束 -->
