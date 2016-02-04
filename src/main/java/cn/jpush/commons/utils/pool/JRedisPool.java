@@ -17,10 +17,10 @@ public class JRedisPool {
     private static JedisPoolConfig poolConfig = new JedisPoolConfig();
 
     static {
-        poolConfig.setMaxTotal(SystemConfig.getIntProperty("redis.max.total",300));
+        poolConfig.setMaxTotal(SystemConfig.getIntProperty("redis.max.total", 300));
         // #最大空闲数
-        poolConfig.setMaxIdle(SystemConfig.getIntProperty("redis.max.idle",100));
-        poolConfig.setMinIdle(SystemConfig.getIntProperty("redis.min.idle",0));
+        poolConfig.setMaxIdle(SystemConfig.getIntProperty("redis.max.idle", 100));
+        poolConfig.setMinIdle(SystemConfig.getIntProperty("redis.min.idle", 0));
     }
 
     public static void register(String key) {
@@ -35,10 +35,13 @@ public class JRedisPool {
     }
 
     public static Jedis getClient(String key) {
-        if(!poolMap.containsKey(key)) {
-            register(key);
+
+        synchronized (poolMap) {
+            if (!poolMap.containsKey(key)) {
+                register(key);
+            }
         }
-        try{
+        try {
             return poolMap.get(key).getResource();
         } catch (Exception e) {
             LOG.error("Failed to get redis client " + key, e);
@@ -47,7 +50,7 @@ public class JRedisPool {
     }
 
     public static void returnClient(String key, Jedis jedis) {
-        try{
+        try {
             poolMap.get(key).returnResource(jedis);
         } catch (Exception e) {
             LOG.error("Failed to return client " + key, e);

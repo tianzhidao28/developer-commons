@@ -40,8 +40,10 @@ public class CBPool {
     }
 
     public static CouchbaseClient getClient(String key) {
-        if(!poolMap.containsKey(key)) {
-            register(key);
+        synchronized (poolMap) {
+            if (!poolMap.containsKey(key)) {
+                register(key);
+            }
         }
         try {
             return poolMap.get(key).borrowObject();

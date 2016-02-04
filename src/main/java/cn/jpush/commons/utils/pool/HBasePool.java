@@ -1,8 +1,5 @@
 package cn.jpush.commons.utils.pool;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import cn.jpush.commons.utils.config.SystemConfig;
 import org.apache.commons.pool2.ObjectPool;
 import org.apache.commons.pool2.impl.GenericObjectPool;
@@ -10,6 +7,9 @@ import org.apache.commons.pool2.impl.GenericObjectPoolConfig;
 import org.apache.hadoop.hbase.client.Table;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class HBasePool {
 
@@ -39,8 +39,11 @@ public class HBasePool {
     }
     
     public static Table getTable(String tableName) {
-        if( !poolMap.containsKey(tableName) ) {
-            register(tableName);
+
+        synchronized (poolMap) {
+            if (!poolMap.containsKey(tableName)) {
+                register(tableName);
+            }
         }
         try {
             return poolMap.get(tableName).borrowObject();

@@ -38,8 +38,11 @@ public class ESPool {
     }
 
     public static Client getClient(String key) {
-        if (!poolMap.containsKey(key)) {
-            register(key);
+
+        synchronized (poolMap) {
+            if (!poolMap.containsKey(key)) {
+                register(key);
+            }
         }
         try {
             return poolMap.get(key).borrowObject();

@@ -22,7 +22,7 @@ public class DBPool {
 				System.getProperty("user.dir") + "/c3p0-config.xml");
 	}
 
-	public synchronized static void register(String key) {
+	public  static void register(String key) {
 		try {
 			ComboPooledDataSource statCpds = new ComboPooledDataSource(key);
 			poolMap.put(key, statCpds);
@@ -31,16 +31,17 @@ public class DBPool {
 		}
 	}
 
-	public synchronized static Connection getConnection(String key) {
+	public  static Connection getConnection(String key) {
 		try {
 			ComboPooledDataSource cpds = null;
-			
-			if ( poolMap.containsKey(key) ){
-				cpds = poolMap.get(key);
-			} else {
-				cpds = new ComboPooledDataSource(key);
-				poolMap.put(key, cpds);
-			}
+			synchronized (poolMap) {
+                if (poolMap.containsKey(key)) {
+                    cpds = poolMap.get(key);
+                } else {
+                    cpds = new ComboPooledDataSource(key);
+                    poolMap.put(key, cpds);
+                }
+            }
 			Connection conn = cpds.getConnection();
 			return conn;
 		} catch (SQLException e) {
@@ -49,7 +50,7 @@ public class DBPool {
 		}
 	}
 
-	public synchronized static void shutdown() {
+	public static void shutdown() {
 		Iterator<ComboPooledDataSource> itors = poolMap.values().iterator();
 		while (itors.hasNext()) {
 			ComboPooledDataSource cpds = itors.next();
@@ -57,7 +58,7 @@ public class DBPool {
 		}
 	}
 	
-	public synchronized static void close(Connection conn) {
+	public static void close(Connection conn) {
 		if(conn != null) {
 			try {
 				conn.close();
