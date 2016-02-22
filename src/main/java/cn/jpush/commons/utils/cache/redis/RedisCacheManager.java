@@ -2,6 +2,7 @@ package cn.jpush.commons.utils.cache.redis;
 
 import cn.jpush.alarm.AlarmClient;
 import cn.jpush.commons.utils.io.SerializeUtils;
+import com.sun.el.parser.BooleanNode;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -53,11 +54,11 @@ public class RedisCacheManager {
             if (resource != null) {
                 return resource;
             } else {
-                log.error(String.format("[Redis] get {} redis is empty.", poolName));
+                log.error(String.format("[Redis] get %s redis is empty.", poolName));
                 return null;
             }
         } catch (Exception e) {
-            log.error(String.format("[Redis] get {} redis exception", poolName), e);
+            log.error(String.format("[Redis] get %s redis exception", poolName), e);
             return null;
         }
     }
@@ -117,7 +118,7 @@ public class RedisCacheManager {
         return new RedisExecutor<Long>() {
             @Override
             Long execute() {
-                return jedis.expire(key,seconds);
+                return jedis.expire(key, seconds);
             }
         }.getResult();
     }
@@ -423,6 +424,39 @@ public class RedisCacheManager {
             @Override
             Long execute() {
                 Long retValue = jedis.decr(key);
+                log.info("[Redis] decr key={},newValue={}", key, retValue);
+                return retValue;
+            }
+        }.getResult();
+    }
+
+    /**
+     * 检查key是否存在
+     * @param key key
+     * @return isTrue
+     */
+    public Boolean exists(final String key) {
+        return new RedisExecutor<Boolean>() {
+            @Override
+            Boolean execute() {
+                Boolean retValue = jedis.exists(key);
+                log.info("[Redis] decr key={},newValue={}", key, retValue);
+                return retValue;
+            }
+        }.getResult();
+    }
+
+    /**
+     * 检查key对应的键值对中是否存在field字段
+     * @param key key
+     * @param field field
+     * @return isTrue
+     */
+    public Boolean hexists(final String key, final String field) {
+        return new RedisExecutor<Boolean>() {
+            @Override
+            Boolean execute() {
+                Boolean retValue = jedis.hexists(key, field);
                 log.info("[Redis] decr key={},newValue={}", key, retValue);
                 return retValue;
             }
