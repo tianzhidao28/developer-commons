@@ -18,5 +18,7 @@
 * HBase dependency bug fixed
 * HBase connection bug fixed
 
-
+### 1.4.3
+* RedisCacheManager里 增加几个操作方法
+* XXPool bug 修复
 
