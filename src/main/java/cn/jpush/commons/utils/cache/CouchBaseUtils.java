@@ -1,5 +1,6 @@
 package cn.jpush.commons.utils.cache;
 
+import cn.jpush.commons.utils.exception.TimeoutException;
 import com.couchbase.client.CouchbaseClient;
 import net.spy.memcached.OperationTimeoutException;
 import org.apache.commons.lang3.ObjectUtils;
@@ -75,6 +76,56 @@ public class CouchBaseUtils {
 	}
 
 
+
+
+
+
+	/**
+	 * 从CB中获取元素的值,中途出现异常则抛出
+	 * @param couchBaseName
+	 * @param key
+	 * @return TimeoutException
+	 */
+	public static String getDataEx(String couchBaseName , String key) {
+
+		String value = null;
+		try {
+			CouchbaseClient client = CouchBaseManager.getCouchbaseClientInstance(couchBaseName);
+			value = ObjectUtils.toString(client.get(key));
+			LOG.info("[CouchBase: {} ] get data ok, key={},value={}",couchBaseName, key, value);
+		}catch (OperationTimeoutException et){
+			errorWork(couchBaseName);
+		} catch(Exception e) {
+			LOG.error("[CouchBase: {} ] get data exception, key={},exception={}",couchBaseName, key,e.getMessage());
+			throw new RuntimeException(e);
+		}
+		return value;
+	}
+
+
+	/**
+	 * 从CB中获取元素的值,中途出现异常则抛出
+	 * @param couchBaseName
+	 * @param key
+     * @return
+     */
+	public static Object getObjectDataEx(String couchBaseName , String key) {
+
+		Object value = null;
+		try {
+			CouchbaseClient client = CouchBaseManager.getCouchbaseClientInstance(couchBaseName);
+			value = client.get(key);
+			LOG.info("[CouchBase: {} ] get data ok, key={},value={}",couchBaseName, key, value);
+			return value;
+		}catch (OperationTimeoutException et){
+			errorWork(couchBaseName);
+		} catch(Exception e) {
+			LOG.error("[CouchBase: {} ] get data exception, key={},exception={}",couchBaseName, key,e.getMessage());
+			throw new RuntimeException(e);
+		}
+		return value;
+	}
+
 	public static void errorWork(String couchBaseName) {
 		LOG.error(" cb {} timeout",couchBaseName);
 		AtomicInteger cnt = errCntsMap.get(couchBaseName);
@@ -87,6 +138,7 @@ public class CouchBaseUtils {
 			cnt.set(0);
 			errCntsMap.put(couchBaseName,cnt);
 			LOG.info("cb {} has reconnection... ",couchBaseName);
+			throw new TimeoutException("CouchBase :" + couchBaseName + "操作超时");
 		} else {
 
 			errCntsMap.put(couchBaseName,cnt);
