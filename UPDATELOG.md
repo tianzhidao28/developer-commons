@@ -11,7 +11,7 @@
 * 增加SpringMVC 中通过注解获取request attr的工具
 
 ### 1.4.1
-* * 增加 HBase 相关工具类的更新 HInterface-替换为Table
+* 增加 HBase 相关工具类的更新 HInterface-替换为Table
 * 删掉HBase Manager 类
 
 ### 1.4.2
@@ -22,3 +22,14 @@
 * RedisCacheManager里 增加几个操作方法
 * XXPool bug 修复
 
+### 1.4.4
+* CouchBase 操作增加 可以抛出异常的操作
+  TimeoutException ｜ RuntimeException
+  CouchBaseUtils.getDataEx(String couchBaseName , String key)
+  CouchBaseUtils.getObjectDataEx(String couchBaseName , String key)
+  增加 参数判断空校验
+  RedisCacheManager getInstance拼写错误修正(错误的拼写暂时还保留)
+
+### 1.4.5
+
+* 增加 mvn api 测试 ,先让API返回结果 给前端去测试  再去编写实现

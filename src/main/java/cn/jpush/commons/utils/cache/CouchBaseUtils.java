@@ -95,6 +95,7 @@ public class CouchBaseUtils {
 			LOG.info("[CouchBase: {} ] get data ok, key={},value={}",couchBaseName, key, value);
 		}catch (OperationTimeoutException et){
 			errorWork(couchBaseName);
+			throw new TimeoutException("CouchBase :" + couchBaseName + "操作超时");
 		} catch(Exception e) {
 			LOG.error("[CouchBase: {} ] get data exception, key={},exception={}",couchBaseName, key,e.getMessage());
 			throw new RuntimeException(e);
@@ -119,11 +120,11 @@ public class CouchBaseUtils {
 			return value;
 		}catch (OperationTimeoutException et){
 			errorWork(couchBaseName);
+			throw new TimeoutException("CouchBase :" + couchBaseName + "操作超时");
 		} catch(Exception e) {
 			LOG.error("[CouchBase: {} ] get data exception, key={},exception={}",couchBaseName, key,e.getMessage());
 			throw new RuntimeException(e);
 		}
-		return value;
 	}
 
 	public static void errorWork(String couchBaseName) {
@@ -138,9 +139,7 @@ public class CouchBaseUtils {
 			cnt.set(0);
 			errCntsMap.put(couchBaseName,cnt);
 			LOG.info("cb {} has reconnection... ",couchBaseName);
-			throw new TimeoutException("CouchBase :" + couchBaseName + "操作超时");
 		} else {
-
 			errCntsMap.put(couchBaseName,cnt);
 		}
 	}
