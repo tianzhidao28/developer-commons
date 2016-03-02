@@ -33,25 +33,10 @@ public class RedisCacheManager {
 
     /**
      * 获取Redis缓存管理工具类的实例
-     * 单词写错了  用下面的那个
+     *
      * @param poolName 队列名
      */
-    @Deprecated
     public static RedisCacheManager getInstanse(String poolName) {
-        RedisCacheManager redisCacheManager = cache.get(poolName);
-        if (cache.get(poolName) == null) {
-            redisCacheManager = new RedisCacheManager(poolName);
-            cache.put(poolName, redisCacheManager);
-        }
-        return redisCacheManager;
-    }
-
-    /**
-     * 获取Redis缓存管理工具类的实例
-     * 单词写错了  用下面的那个
-     * @param poolName 队列名
-     */
-    public static RedisCacheManager getInstance(String poolName) {
         RedisCacheManager redisCacheManager = cache.get(poolName);
         if (cache.get(poolName) == null) {
             redisCacheManager = new RedisCacheManager(poolName);
@@ -236,6 +221,10 @@ public class RedisCacheManager {
 
     /**
      * sorted set 增加元素
+     * @param key
+     * @param score
+     * @param member
+     * @return
      */
     public Long zadd(final String key, final double score, final String member) {
         return new RedisExecutor<Long>() {
@@ -246,7 +235,12 @@ public class RedisCacheManager {
         }.getResult();
     }
 
-
+    /**
+     * @param key
+     * @param min
+     * @param max
+     * @return
+     */
     public Long zcount(final String key, final double min, final double max) {
         return new RedisExecutor<Long>() {
             @Override
@@ -256,7 +250,11 @@ public class RedisCacheManager {
         }.getResult();
     }
 
-
+    /**
+     * @param key
+     * @param field
+     * @return
+     */
     public String hget(final String key, final String field) {
         return new RedisExecutor<String>() {
             @Override
@@ -275,7 +273,11 @@ public class RedisCacheManager {
         }.getResult();
     }
 
-
+    /**
+     * @param key
+     * @param field
+     * @return
+     */
     public Long hset(final String key, final String field, final String value) {
         return new RedisExecutor<Long>() {
             @Override
@@ -285,6 +287,25 @@ public class RedisCacheManager {
         }.getResult();
     }
 
+
+    /**
+     * 删除hash表中的某个字段
+     */
+    public Long hdel(final String key, final String field) {
+        return new RedisExecutor<Long>() {
+            @Override
+            Long execute() {
+                return jedis.hdel(key, field);
+            }
+        }.getResult();
+    }
+    /**
+     * hash
+     *
+     * @param key
+     * @param fieldMap
+     * @return
+     */
     public String hmset(final String key, final HashMap<String, String> fieldMap) {
         return new RedisExecutor<String>() {
             @Override
@@ -294,7 +315,13 @@ public class RedisCacheManager {
         }.getResult();
     }
 
-
+    /**
+     * Set
+     *
+     * @param key
+     * @param value
+     * @return
+     */
     public String set(final String key, final String value) {
         return new RedisExecutor<String>() {
             @Override
