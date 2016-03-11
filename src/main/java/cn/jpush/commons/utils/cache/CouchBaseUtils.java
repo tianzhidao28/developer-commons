@@ -7,6 +7,7 @@ import org.apache.commons.lang3.ObjectUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -70,6 +71,16 @@ public class CouchBaseUtils {
 			CouchbaseClient client = CouchBaseManager.getCouchbaseClientInstance(couchBaseName);
 			client.set(key, 0, value);
 			LOG.info("[CouchBase: {} ] set data ok, key={},value={}",couchBaseName, key, value);
+		} catch (Exception e) {
+			LOG.error("[CouchBase: {} ] set data exeception, key={},exeception={}",couchBaseName, key, e.getMessage());
+		}
+	}
+
+	public static void delData(String couchBaseName, String key) {
+		try {
+			CouchbaseClient client = CouchBaseManager.getCouchbaseClientInstance(couchBaseName);
+			client.delete(key);
+			LOG.info("[CouchBase: {} ] set data ok, key={},value={}",couchBaseName, key);
 		} catch (Exception e) {
 			LOG.error("[CouchBase: {} ] set data exeception, key={},exeception={}",couchBaseName, key, e.getMessage());
 		}

@@ -76,33 +76,33 @@ public class ReidsCacheManagerCodeGenerator {
         try {
             final CtMethod[] methods = pool.get(Jedis.class.getName()).getDeclaredMethods();
             final CtMethod[] interfaceMethods = pool.get(JedisCommands.class.getName()).getDeclaredMethods();
-            //只实现这个接口的方法
+            //记录jedisCommon的方法的的唯一标识（签名+方法名）
             final Set<String> signatures = new HashSet<String>(){{
                 for(CtMethod method : interfaceMethods){
-                    this.add(method.getSignature() + method.getName());
+                    add(method.getSignature() + method.getName());
                 }
             }};
             return new HashMap<String, Object>(){{
-                this.put("methods", new LinkedList<Object>(){{
+                put("methods", new LinkedList<Object>(){{
 
                     for (final CtMethod method : methods) {
-                        //判断是否非静态方法，并且属于JedisCommon接口
+                        //静态方法，或不属于JedisCommon接口的方法不是我们要生成的目标，跳过（实际上静态的判断是多余的）
                         if(Modifier.isStatic(method.getModifiers()) || !signatures.contains(method.getSignature() + method.getName())){
                             continue;
                         }
-                        this.add(new HashMap<String, Object>() {{
+                        add(new HashMap<String, Object>() {{
 
-                            this.put("returnType", getWrapperClassName(method.getReturnType()));
-                            this.put("name", method.getName());
-                            this.put("args", new LinkedList<Object>() {{
+                            put("returnType", getWrapperClassName(method.getReturnType()));
+                            put("name", method.getName());
+                            put("args", new LinkedList<Object>() {{
 
                                 final CtClass[] types = method.getParameterTypes();
                                 final LocalVariableAttribute params = (LocalVariableAttribute) method.getMethodInfo2().getCodeAttribute().getAttribute(LocalVariableAttribute.tag);
                                 for (int i = 0; i < types.length; i++) {
                                     final int index = i;
-                                    this.add(new HashMap<String, String>() {{
-                                        this.put("type", getClassName(types[index]));
-                                        this.put("name", params.variableName(index + 1));
+                                    add(new HashMap<String, String>() {{
+                                        put("type", getClassName(types[index]));
+                                        put("name", params.variableName(index + 1));
                                     }});
                                 }
 
@@ -164,11 +164,16 @@ public class ReidsCacheManagerCodeGenerator {
     }
 
     /**
-     * 基础类型不能作为泛型，需要的时候通过这个方法获得包装类
+     * 转换内部类标识$为.
+     * 简化java.lang.*
      * @param c class
      * @return 包装类名
      */
     private static String getClassName(CtClass c){
+
+        new HashMap<String,String>(){{
+            put("name", "value");
+        }};
         String name = c.getName().replaceAll("\\$", ".");
         name = name.replaceFirst("^java\\.lang\\.", "");
         return name;
