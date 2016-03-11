@@ -1,6 +1,5 @@
 package cn.jpush.commons.utils.properties;
 
-import com.sun.istack.internal.NotNull;
 import org.apache.commons.lang3.StringUtils;
 
 import java.io.IOException;
@@ -163,7 +162,7 @@ public class PropertiesLoader {
      * @param converter 自定的String类型到Clazz类型的转换器，实现Converter接口
      * @param <T>       转换结果
      */
-    static <T> void registConverter(@NotNull Class<T> clazz, @NotNull PropertiesWrapper.Converter<T> converter){
+    static <T> void registConverter(Class<T> clazz, PropertiesWrapper.Converter<T> converter){
         PropertiesWrapper.registConverter(clazz, converter);
     }
 

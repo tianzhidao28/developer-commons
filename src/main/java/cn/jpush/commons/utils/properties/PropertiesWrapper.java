@@ -1,7 +1,4 @@
 package cn.jpush.commons.utils.properties;
-
-import com.sun.istack.internal.NotNull;
-
 import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -37,7 +34,7 @@ public class PropertiesWrapper {
      * @param clazz 配置类型
      * @return key对应的配置，封装为clazz类型
      */
-    public <T> T get(@NotNull String key, @NotNull Class<T> clazz) {
+    public <T> T get( String key, Class<T> clazz) {
         if(!prop.containsKey(key)) {
             throw new RuntimeException(String.format("properties not contains key %s", key));
         }
@@ -131,7 +128,7 @@ public class PropertiesWrapper {
      * @param key key
      * @return key对应的clazz类型配置
      */
-    public <T> ArrayList<T> getArray(@NotNull String key, @NotNull Class clazz) {
+    public <T> ArrayList<T> getArray(String key, Class clazz) {
         ArrayList<String> src = getArray(key);
 
         //通过逻辑保证正确性
@@ -236,7 +233,7 @@ public class PropertiesWrapper {
      * @param converter 自定的String类型到Clazz类型的转换器，实现Converter接口
      * @param <T>       转换结果
      */
-    public static <T> void registConverter(@NotNull Class<T> clazz, @NotNull Converter<T> converter) {
+    public static <T> void registConverter(Class<T> clazz, Converter<T> converter) {
         converters.put(clazz, converter);
     }
 
