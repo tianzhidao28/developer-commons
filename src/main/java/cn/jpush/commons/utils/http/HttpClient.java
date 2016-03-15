@@ -2,11 +2,11 @@ package cn.jpush.commons.utils.http;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
+import org.apache.http.client.CookieStore;
 import org.apache.http.client.methods.HttpRequestBase;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.util.EntityUtils;
 
-import java.net.CookieStore;
 import java.util.Objects;
 import java.util.Set;
 
@@ -26,7 +26,7 @@ import java.util.Set;
  *  Created by leolin on 16/1/25.
  */
 public class HttpClient {
-    private DefaultHttpClient client;
+    protected DefaultHttpClient client;
 
     private HttpClient(){}
 
@@ -40,6 +40,29 @@ public class HttpClient {
         HttpClient httpClient = new HttpClient();
         httpClient.client = new SSLClient();
         return httpClient;
+    }
+
+    /**
+     * 获取一个HTTP client
+     * 根据URL的协议自动选择HTTP或者HTTPS的client
+     * 使用虽然简便，但是对于cookies的操纵容易出现问题。因为HTTP和HTTPS的client各自持有自己的上下文。
+     * 尽量避免在需要同时使用两种协议的情况下使用cookies
+     */
+    public static HttpClient getSimpleClient(){
+        return new HttpClient(){
+            private DefaultHttpClient
+                httpClient = new DefaultHttpClient(),
+                httpsClient = new SSLClient();
+
+            public String doRequest(HttpRequestBase httpRequest, String decode, Set<Integer> expectStatuses) throws HttpException {
+                if (Objects.equals("https", httpRequest.getURI().getScheme())) {
+                    super.client = this.httpsClient;
+                } else {
+                    super.client = this.httpClient;
+                }
+                return super.doRequest(httpRequest, decode, expectStatuses);
+            }
+        };
     }
 
     /**
@@ -77,11 +100,11 @@ public class HttpClient {
         }
     }
 
-    public org.apache.http.client.CookieStore getCookies(){
+    public CookieStore getCookies(){
         return client.getCookieStore();
     }
 
-    public void setCookies(org.apache.http.client.CookieStore cookies){
+    public void setCookies(CookieStore cookies){
         client.setCookieStore(cookies);
     }
 }

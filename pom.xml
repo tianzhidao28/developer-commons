@@ -6,7 +6,7 @@
 
     <groupId>cn.jpush</groupId>
     <artifactId>developer-commons</artifactId>
-    <version>1.4.8</version>
+    <version>1.4.9</version>
     <packaging>jar</packaging>
 
     <properties>
@@ -37,7 +37,7 @@
         <hibernate.validator.version>4.2.0.Final</hibernate.validator.version>
         <jackson_version>2.3.3</jackson_version>
 
-        <httpclient_version>4.2.1</httpclient_version>
+        <httpclient_version>4.3.1</httpclient_version>
         <hessian_lite_version>3.2.1-fixed-2</hessian_lite_version>
         <fastjson.version>1.2.7</fastjson.version>
         <bsf_version>3.1</bsf_version>
@@ -275,7 +275,11 @@
         </dependency>
 
 
-
+        <dependency>
+            <groupId>org.apache.httpcomponents</groupId>
+            <artifactId>httpmime</artifactId>
+            <version>${httpclient_version}</version>
+        </dependency>
 
     </dependencies>
 
