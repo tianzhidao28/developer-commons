@@ -92,7 +92,8 @@ public class ReidsCacheManagerCodeGenerator {
                         }
                         add(new HashMap<String, Object>() {{
 
-                            put("returnType", getWrapperClassName(method.getReturnType()));
+                            put("returnType", getClassName(method.getReturnType()));
+                            put("returnWrapperType", getWrapperClassName(method.getReturnType()));
                             put("name", method.getName());
                             put("args", new LinkedList<Object>() {{
 

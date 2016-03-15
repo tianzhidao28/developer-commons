@@ -58,14 +58,15 @@ public class HttpClientTest {
     public void testRequest() throws IllegalAccessException, NoSuchMethodException, InvocationTargetException {
         String url = "http://www.baidu.com";
         HttpClient httpClient = HttpClient.getHttpClient();
-        HttpRequestBase request = HttpRequestBuilder.getBuilder(POST)
-            .addHeader(HttpRequestBuilder.JSON_CONTENT_TYPE_WITH_UTF_8)
-            .setJsonBody("[{" +
-                "\"name\":\"leo\"," +
-                "\"sex\":\"man\"" +
+        HttpRequestBase request = HttpRequestBuilder.getBuilder(HttpRequestBuilder.RequestType.POST)
+            .setUrl("https://api.im.jpush.cn/users")
+            .basicAuth("104a31bd8e8e582259fdf369", "21f6fae440d6f71223f5690c")
+            .setJsonBody("[{\n" +
+                "    \"username\": \"tjxsdfnj\",\n" +
+                "    \"password\": \"123456\"\n" +
                 "}]")
-            .setUrl(url)
-            .build();
+            .addHeader(HttpRequestBuilder.JSON_CONTENT_TYPE_WITH_UTF_8).build();
+
         String result = httpClient.doRequest(request, "utf-8");
         System.out.println(result);
     }
