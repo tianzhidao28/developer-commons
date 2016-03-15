@@ -60,10 +60,10 @@ public class HttpClientTest {
         HttpClient httpClient = HttpClient.getHttpClient();
         HttpRequestBase request = HttpRequestBuilder.getBuilder(POST)
             .addHeader(HttpRequestBuilder.JSON_CONTENT_TYPE_WITH_UTF_8)
-            .setJsonBody(new HashMap() {{
-                this.put("name", "leo");
-                this.put("sex", "man");
-            }})
+            .setJsonBody("[{" +
+                "\"name\":\"leo\"," +
+                "\"sex\":\"man\"" +
+                "}]")
             .setUrl(url)
             .build();
         String result = httpClient.doRequest(request, "utf-8");

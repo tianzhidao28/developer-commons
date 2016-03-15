@@ -208,7 +208,11 @@ public class HttpRequestBuilder {
                 }
                 str = JSON.toJSONString(data);
             } else {
-                str = JSON.toJSONString(jsonBody);
+                 if(String.class.isInstance(jsonBody) ) {
+                     str = (String) jsonBody;
+                 } else {
+                     str = JSON.toJSONString(jsonBody);
+                 }
             }
 
             return new StringEntity(str, Charset.forName(encode));
