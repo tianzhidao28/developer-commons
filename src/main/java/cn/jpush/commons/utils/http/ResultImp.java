@@ -7,42 +7,39 @@ import org.apache.http.util.EntityUtils;
 import java.io.IOException;
 
 /**
- * http错误的封装，不包括IO等异常
+ * http结果的封装
  * 提示性的message存放在message，非必须
  * status表示http状态码
  * response是附加的http响应对象，便于获取响应体的完整信息。
  * Created by leolin on 16/1/26.
  */
-public class HttpException extends Exception implements Result {
+public class ResultImp implements Result {
     private Integer status;
     private HttpResponse response;
     private String decode;
 
-    public HttpException(HttpResponse response, String decode){
-        super(
-            String.format(
-                "【HTTP Error】\n code:%d, reason:%s\n",
-                response.getStatusLine().getStatusCode(),
-                response.getStatusLine().getReasonPhrase()
-            )
-        );
+    public ResultImp(HttpResponse response, String decode){
         this.status = response.getStatusLine().getStatusCode();
         this.response = response;
         this.decode = decode;
     }
 
+    @Override
     public Integer getStatus() {
         return status;
     }
 
+    @Override
     public void setStatus(Integer status) {
         this.status = status;
     }
 
+    @Override
     public HttpResponse getResponse() {
         return response;
     }
 
+    @Override
     public void setResponse(HttpResponse response) {
         this.response = response;
     }
@@ -51,6 +48,7 @@ public class HttpException extends Exception implements Result {
      * get response body
      * @return response body
      */
+    @Override
     public String getBody() {
         try {
             return EntityUtils.toString(this.response.getEntity(), this.decode);
@@ -63,6 +61,7 @@ public class HttpException extends Exception implements Result {
      * get http header
      * @return http headers
      */
+    @Override
     public Header[] getHeaders() {
         return response.getAllHeaders();
     }

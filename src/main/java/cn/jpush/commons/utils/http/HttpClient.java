@@ -2,11 +2,13 @@ package cn.jpush.commons.utils.http;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
+import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.CookieStore;
 import org.apache.http.client.methods.HttpRequestBase;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.util.EntityUtils;
 
+import java.io.IOException;
 import java.util.Objects;
 import java.util.Set;
 
@@ -54,7 +56,7 @@ public class HttpClient {
                 httpClient = new DefaultHttpClient(),
                 httpsClient = new SSLClient();
 
-            public String doRequest(HttpRequestBase httpRequest, String decode, Set<Integer> expectStatuses) throws HttpException {
+            public Result doRequest(HttpRequestBase httpRequest, String decode, Set<Integer> expectStatuses) throws HttpException {
                 if (Objects.equals("https", httpRequest.getURI().getScheme())) {
                     super.client = this.httpsClient;
                 } else {
@@ -67,38 +69,46 @@ public class HttpClient {
 
     /**
      * @param httpRequest    请求体
-     * @param decode         body的解码
      * @param expectStatuses 期望的http返回码，不符合期望的时候抛出HttpException异常
-     * @return 响应体
      */
-    public String doRequest(HttpRequestBase httpRequest, String decode, Set<Integer> expectStatuses) throws HttpException {
-        String result = null;
+    public Result doRequest(HttpRequestBase httpRequest,String decode, Set<Integer> expectStatuses) throws HttpException {
         try {
             HttpResponse response = client.execute(httpRequest);
             if (response != null) {
-                HttpEntity resEntity = response.getEntity();
-                if (expectStatuses != null && !expectStatuses.contains(response.getStatusLine().getStatusCode())) {
-                    throw new HttpException(response);
-                }
-                if (resEntity != null) {
-                    result = EntityUtils.toString(resEntity, decode);
+                if (expectStatuses == null || expectStatuses.contains(response.getStatusLine().getStatusCode())) {
+                    return new ResultImp(response, decode);
+                } else {
+                    throw new HttpException(response, decode);
                 }
             }
-        } catch (HttpException e) {
-            throw e;
-        } catch (Exception e) {
+        } catch (IOException e) {
             e.printStackTrace();
         }
-        return result;
+        return null;
     }
 
-    public  String doRequest(HttpRequestBase request, String decode) {
-        try {
-            return doRequest(request, decode, null);
-        } catch (HttpException e) {
-            return null;
-        }
+
+    /**
+     * @param httpRequest    请求体
+     * @return 响应体
+     */
+    public Result doRequest(HttpRequestBase httpRequest, String decode) throws HttpException {
+        return doRequest(httpRequest, decode, (Set<Integer>)null);
     }
+
+//    /**
+//     * @param httpRequest    请求体
+//     * @param decode         body的解码
+//     * @param expectStatuses 期望的http返回码，不符合期望的时候抛出HttpException异常
+//     * @return 响应体
+//     */
+//    public String doRequestForBody(HttpRequestBase httpRequest, String decode, Set<Integer> expectStatuses) throws HttpException {
+//        return doRequest(httpRequest, decode, expectStatuses).getBody();
+//    }
+//
+//    public  String doRequestForBody(HttpRequestBase request, String decode) throws HttpException{
+//        return doRequestForBody(request, decode, null);
+//    }
 
     public CookieStore getCookies(){
         return client.getCookieStore();

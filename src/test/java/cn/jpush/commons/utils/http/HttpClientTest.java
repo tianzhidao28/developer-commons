@@ -55,7 +55,7 @@ public class HttpClientTest {
     }
 
     @Test
-    public void testRequest() throws IllegalAccessException, NoSuchMethodException, InvocationTargetException {
+    public void testRequest() throws HttpException {
         String url = "http://www.baidu.com";
         HttpClient httpClient = HttpClient.getHttpClient();
         HttpRequestBase request = HttpRequestBuilder.getBuilder(HttpRequestBuilder.RequestType.POST)
@@ -67,7 +67,8 @@ public class HttpClientTest {
                 "}]")
             .addHeader(HttpRequestBuilder.JSON_CONTENT_TYPE_WITH_UTF_8).build();
 
-        String result = httpClient.doRequest(request, "utf-8");
-        System.out.println(result);
+//        String result = httpClient.doRequest(request, "utf-8");
+        Result result = httpClient.doRequest(request, "utf-8");
+        System.out.println(result.getBody());
     }
 } 
