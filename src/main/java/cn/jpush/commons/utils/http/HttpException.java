@@ -17,6 +17,7 @@ public class HttpException extends Exception implements Result {
     private Integer status;
     private HttpResponse response;
     private String decode;
+    private String body;
 
     public HttpException(HttpResponse response, String decode){
         super(
@@ -29,6 +30,11 @@ public class HttpException extends Exception implements Result {
         this.status = response.getStatusLine().getStatusCode();
         this.response = response;
         this.decode = decode;
+        try {
+            body = EntityUtils.toString(this.response.getEntity(), this.decode);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     public Integer getStatus() {
@@ -52,11 +58,7 @@ public class HttpException extends Exception implements Result {
      * @return response body
      */
     public String getBody() {
-        try {
-            return EntityUtils.toString(this.response.getEntity(), this.decode);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+        return this.body;
     }
 
     /**

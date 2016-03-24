@@ -4,9 +4,16 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import org.apache.commons.beanutils.BeanMap;
 import org.apache.commons.beanutils.BeanUtils;
+import org.apache.http.HttpResponse;
 import org.apache.http.client.methods.HttpRequestBase;
+import org.apache.http.concurrent.FutureCallback;
+import org.apache.http.impl.nio.client.CloseableHttpAsyncClient;
+import org.apache.http.impl.nio.client.HttpAsyncClients;
+import org.apache.http.nio.client.HttpAsyncClient;
 import org.junit.Test;
 
+import java.io.Closeable;
+import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -55,20 +62,57 @@ public class HttpClientTest {
     }
 
     @Test
-    public void testRequest() throws HttpException {
+    public void testRequest() throws HttpException, InterruptedException, IOException {
         String url = "http://www.baidu.com";
-        HttpClient httpClient = HttpClient.getHttpClient();
-        HttpRequestBase request = HttpRequestBuilder.getBuilder(HttpRequestBuilder.RequestType.POST)
-            .setUrl("https://api.im.jpush.cn/users")
-            .basicAuth("104a31bd8e8e582259fdf369", "21f6fae440d6f71223f5690c")
-            .setJsonBody("[{\n" +
-                "    \"username\": \"tjxsdfnj\",\n" +
-                "    \"password\": \"123456\"\n" +
-                "}]")
-            .addHeader(HttpRequestBuilder.JSON_CONTENT_TYPE_WITH_UTF_8).build();
+//        HttpClient httpClient = HttpClient.getHttpClient();
+//        HttpRequestBase request = HttpRequestBuilder.getBuilder(HttpRequestBuilder.RequestType.POST)
+//            .setUrl("https://api.im.jpush.cn/users")
+//            .basicAuth("104a31bd8e8e582259fdf369", "21f6fae440d6f71223f5690c")
+//            .setJsonBody("[{\n" +
+//                "    \"username\": \"tjxsdfnj\",\n" +
+//                "    \"password\": \"123456\"\n" +
+//                "}]")
+//            .addHeader(HttpRequestBuilder.JSON_CONTENT_TYPE_WITH_UTF_8).build();
+//
+////        String result = httpClient.doRequest(request, "utf-8");
+//        Result result = httpClient.doRequest(request, "utf-8");
+//        System.out.println(result.getBody());
 
-//        String result = httpClient.doRequest(request, "utf-8");
-        Result result = httpClient.doRequest(request, "utf-8");
-        System.out.println(result.getBody());
+//        CloseableHttpAsyncClient asyncClient = HttpAsyncClients.createDefault();
+//        asyncClient.start();
+//        asyncClient.execute(
+//            HttpRequestBuilder.getBuilder(GET)
+//                .setUrl("http://www.baidu.com")
+//                .build(),
+//            new FutureCallback<HttpResponse>() {
+//                @Override
+//                public void completed(HttpResponse httpResponse) {
+//                    System.out.println(httpResponse.getStatusLine().getStatusCode());
+//                }
+//
+//                @Override
+//                public void failed(Exception e) {
+//
+//                }
+//
+//                @Override
+//                public void cancelled() {
+//                    System.out.println("cancelled");
+//                }
+//            }
+//        );
+        HttpClient client = HttpClient.getHttpClient();
+        int x = 10;
+        while(x-- != 0) {
+            String s = client.doRequest(
+                HttpRequestBuilder.getBuilder(GET)
+                    .setUrl(url)
+                    .build()
+                , "utf-8"
+            ).getBody();
+            System.out.println(s.length());
+        }
+//        asyncClient.close();
+//        Thread.currentThread().join();
     }
 } 

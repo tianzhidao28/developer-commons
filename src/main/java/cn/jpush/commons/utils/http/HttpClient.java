@@ -83,6 +83,8 @@ public class HttpClient {
             }
         } catch (IOException e) {
             e.printStackTrace();
+        } finally {
+            httpRequest.abort();
         }
         return null;
     }

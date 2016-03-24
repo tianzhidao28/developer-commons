@@ -17,11 +17,17 @@ public class ResultImp implements Result {
     private Integer status;
     private HttpResponse response;
     private String decode;
+    private String body;
 
     public ResultImp(HttpResponse response, String decode){
         this.status = response.getStatusLine().getStatusCode();
         this.response = response;
         this.decode = decode;
+        try {
+            body = EntityUtils.toString(this.response.getEntity(), this.decode);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Override
@@ -50,11 +56,7 @@ public class ResultImp implements Result {
      */
     @Override
     public String getBody() {
-        try {
-            return EntityUtils.toString(this.response.getEntity(), this.decode);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+        return this.body;
     }
 
     /**
