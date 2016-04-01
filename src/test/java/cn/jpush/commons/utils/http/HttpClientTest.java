@@ -74,43 +74,35 @@ public class HttpClientTest {
 //                "}]")
 //            .addHeader(HttpRequestBuilder.JSON_CONTENT_TYPE_WITH_UTF_8).build();
 //
-////        String result = httpClient.doRequest(request, "utf-8");
 //        Result result = httpClient.doRequest(request, "utf-8");
 //        System.out.println(result.getBody());
 
-//        CloseableHttpAsyncClient asyncClient = HttpAsyncClients.createDefault();
-//        asyncClient.start();
-//        asyncClient.execute(
-//            HttpRequestBuilder.getBuilder(GET)
-//                .setUrl("http://www.baidu.com")
-//                .build(),
-//            new FutureCallback<HttpResponse>() {
-//                @Override
-//                public void completed(HttpResponse httpResponse) {
-//                    System.out.println(httpResponse.getStatusLine().getStatusCode());
-//                }
-//
-//                @Override
-//                public void failed(Exception e) {
-//
-//                }
-//
-//                @Override
-//                public void cancelled() {
-//                    System.out.println("cancelled");
-//                }
-//            }
-//        );
-        HttpClient client = HttpClient.getHttpClient();
-        int x = 10;
-        while(x-- != 0) {
-            String s = client.doRequest(
+        int loop = 100;
+        CloseableHttpAsyncClient asyncClient = HttpAsyncClients.createDefault();
+        asyncClient.start();
+        while(loop -- != 0) {
+            asyncClient.execute(
                 HttpRequestBuilder.getBuilder(GET)
-                    .setUrl(url)
-                    .build()
-                , "utf-8"
-            ).getBody();
-            System.out.println(s.length());
+                    .setUrl("http://www.baidu.com")
+                    .build(),
+                new FutureCallback<HttpResponse>() {
+                    @Override
+                    public void completed(HttpResponse httpResponse) {
+                        System.out.println(httpResponse.getStatusLine().getStatusCode());
+
+                    }
+
+                    @Override
+                    public void failed(Exception e) {
+                        System.out.println("cancelled");
+                    }
+
+                    @Override
+                    public void cancelled() {
+                        System.out.println("cancelled");
+                    }
+                }
+            );
         }
 //        asyncClient.close();
 //        Thread.currentThread().join();

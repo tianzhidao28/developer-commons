@@ -18,6 +18,7 @@ public class HttpException extends Exception implements Result {
     private HttpResponse response;
     private String decode;
     private String body;
+    private Result result;
 
     public HttpException(HttpResponse response, String decode){
         super(
@@ -27,30 +28,23 @@ public class HttpException extends Exception implements Result {
                 response.getStatusLine().getReasonPhrase()
             )
         );
-        this.status = response.getStatusLine().getStatusCode();
-        this.response = response;
-        this.decode = decode;
-        try {
-            body = EntityUtils.toString(this.response.getEntity(), this.decode);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+        result = new ResultImp(response, decode);
     }
 
     public Integer getStatus() {
-        return status;
+        return result.getStatus();
     }
 
     public void setStatus(Integer status) {
-        this.status = status;
+        result.setStatus(status);
     }
 
     public HttpResponse getResponse() {
-        return response;
+        return result.getResponse();
     }
 
     public void setResponse(HttpResponse response) {
-        this.response = response;
+        result.setResponse(response);
     }
 
     /**
@@ -58,7 +52,7 @@ public class HttpException extends Exception implements Result {
      * @return response body
      */
     public String getBody() {
-        return this.body;
+        return result.getBody();
     }
 
     /**
@@ -66,6 +60,6 @@ public class HttpException extends Exception implements Result {
      * @return http headers
      */
     public Header[] getHeaders() {
-        return response.getAllHeaders();
+        return result.getHeaders();
     }
 }

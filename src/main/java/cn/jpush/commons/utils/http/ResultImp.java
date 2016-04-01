@@ -1,6 +1,7 @@
 package cn.jpush.commons.utils.http;
 
 import org.apache.http.Header;
+import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.util.EntityUtils;
 
@@ -24,7 +25,12 @@ public class ResultImp implements Result {
         this.response = response;
         this.decode = decode;
         try {
+            HttpEntity entity = this.response.getEntity();
+            if(entity == null) {
+                body = null;
+            } else {
             body = EntityUtils.toString(this.response.getEntity(), this.decode);
+            }
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
