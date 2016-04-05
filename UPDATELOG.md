@@ -33,3 +33,7 @@
 ### 1.4.5
 
 * 增加 mvn api 测试 ,先让API返回结果 给前端去测试  再去编写实现
+
+
+### 1.5.0
+* RedisCacheManager 增加一个 set(byte[],byte[])
