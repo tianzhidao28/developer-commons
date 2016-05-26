@@ -2,9 +2,8 @@
 package cn.jpush.commons.utils.web;
 
 
-import com.google.common.collect.EnumMultiset;
+import com.alibaba.fastjson.JSON;
 import com.google.common.collect.ImmutableMap;
-import org.eclipse.jetty.util.ajax.JSON;
 
 /**
  * 
@@ -90,11 +89,11 @@ public enum APICode {
     }
 
     public String getComment() {
-    return comment;
+        return comment;
     }
 
     public String toJson() {
-    return JSON.toString(ImmutableMap.of("code",code,"message",message));
+    return JSON.toJSONString(ImmutableMap.of("code",code,"message",message));
     }
 
 
