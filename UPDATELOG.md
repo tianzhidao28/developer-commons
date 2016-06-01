@@ -37,3 +37,7 @@
 
 ### 1.5.0
 * RedisCacheManager 增加一个 set(byte[],byte[])
+
+
+### 1.7.0
+* 为RedisCacheManager 增加详细的异常信息
