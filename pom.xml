@@ -4,7 +4,7 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>cn.jpush</groupId>
+    <groupId>com.rocyuan</groupId>
     <artifactId>developer-commons</artifactId>
     <version>1.7.0</version>
     <packaging>jar</packaging>
@@ -69,8 +69,21 @@
 
     </properties>
 
+    <inceptionYear>2016</inceptionYear>
 
 
+    <parent>
+        <groupId>org.sonatype.oss</groupId>
+        <artifactId>oss-parent</artifactId>
+        <version>9</version>
+    </parent>
+
+    <licenses>
+        <license>
+            <name>Apache License, Version 2.0</name>
+            <url>http://www.apache.org/licenses/LICENSE-2.0</url>
+        </license>
+    </licenses>
 
     <dependencies>
 
@@ -92,12 +105,6 @@
             <groupId>com.google.guava</groupId>
             <artifactId>guava</artifactId>
             <version>${guava.version}</version>
-        </dependency>
-
-        <dependency>
-            <groupId>cn.jpush</groupId>
-            <artifactId>alarm-client</artifactId>
-            <version>2.0.3</version>
         </dependency>
 
         <!-- log4j 1.2.17  slf4j 1.7.5-->
@@ -246,7 +253,6 @@
         <!-- hbase utils 相关结束 -->
 
 
-
         <dependency>
             <groupId>org.mongodb</groupId>
             <artifactId>mongo-java-driver</artifactId>
@@ -273,6 +279,7 @@
             <groupId>cglib</groupId>
             <artifactId>cglib</artifactId>
             <version>2.2.2</version>
+            <scope>provided</scope>
         </dependency>
 
 
@@ -281,33 +288,51 @@
             <groupId>org.apache.httpcomponents</groupId>
             <artifactId>httpmime</artifactId>
             <version>${httpclient_version}</version>
+            <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>org.apache.httpcomponents</groupId>
             <artifactId>httpcore-nio</artifactId>
             <version>${httpclient_version}</version>
+            <scope>provided</scope>
         </dependency>
 
         <dependency>
             <groupId>org.apache.httpcomponents</groupId>
             <artifactId>httpasyncclient</artifactId>
             <version>${httpasyncclient_version}</version>
+            <scope>provided</scope>
         </dependency>
 
         <dependency>
             <groupId>org.apache.httpcomponents</groupId>
             <artifactId>httpasyncclient-cache</artifactId>
             <version>${httpasyncclient_version}</version>
+            <scope>provided</scope>
         </dependency>
 
     </dependencies>
 
+    <developers>
+        <developer>
+            <name>rocyuan</name>
+            <id>rocyuan</id>
+            <email>admin (AT) rocyuan.com</email>
+            <roles>
+                <role>Developer</role>
+            </roles>
+            <timezone>+8</timezone>
+            <organization>stylrplus</organization>
+            <organizationUrl>http://www.rocyuan.com</organizationUrl>
+        </developer>
 
 
-
+    </developers>
 
     <build>
         <plugins>
+
+
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
@@ -316,29 +341,63 @@
                     <target>1.7</target>
                 </configuration>
             </plugin>
+
+
+            <!-- License information -->
+            <plugin>
+                <groupId>com.mycila.maven-license-plugin</groupId>
+                <artifactId>maven-license-plugin</artifactId>
+                <version>1.10.b1</version>
+                <configuration>
+                    <header>${basedir}/license.txt</header>
+                    <quiet>false</quiet>
+                    <failIfMissing>true</failIfMissing>
+                    <aggregate>true</aggregate>
+                    <strictCheck>true</strictCheck>
+                    <properties>
+                        <project>
+                            ${project.name}
+                        </project>
+                        <founder>rocyuan</founder>
+                        <year>${project.inceptionYear}</year>
+                        <website>www.rocyuan.com</website>
+                    </properties>
+                    <includes>
+                        <include>src/main/java/**</include>
+                        <include>src/test/java/**</include>
+                    </includes>
+                    <excludes>
+                        <exclude>**/src/main/java/**/package-info.java</exclude>
+                    </excludes>
+                </configuration>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>format</goal>
+                        </goals>
+                        <phase>process-sources</phase>
+                    </execution>
+                </executions>
+                <dependencies>
+                    <dependency>
+                        <groupId>com.mycila</groupId>
+                        <artifactId>licenses</artifactId>
+                        <version>1</version>
+                    </dependency>
+                </dependencies>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-resources-plugin</artifactId>
+                <version>2.5</version>
+                <configuration>
+                    <encoding>${project.build.sourceEncoding}</encoding>
+                </configuration>
+            </plugin>
         </plugins>
         <!--<finalName>developer-commons</finalName>-->
     </build>
-    <repositories>
-        <repository>
-            <id>nexus</id>
-            <name>nexus</name>
-            <url>http://maven.jpushoa.com/nexus/content/groups/public/</url>
-            <releases>
-                <enabled>true</enabled>
-            </releases>
-            <snapshots>
-                <enabled>true</enabled>
-            </snapshots>
-        </repository>
-    </repositories>
-
-    <distributionManagement>
-        <repository>
-            <id>jpush_maven</id>
-            <url>http://maven.jpushoa.com/nexus/content/repositories/jpush/</url>
-        </repository>
-    </distributionManagement>
 
 
 </project>

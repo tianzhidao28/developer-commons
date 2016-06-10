@@ -15,7 +15,7 @@
 ```
 
 <dependency>
-  <groupId>cn.jpush</groupId>
+  <groupId>com.rocyuan</groupId>
   <artifactId>developer-commons</artifactId>
   <version>1.7.0</version>
 </dependency>
@@ -81,13 +81,9 @@
 
 > 在 classpath:下面的 system-config.properties (优先) 或者system.properties文件里 加入如下配置
 ```
-app-stats.couchbase.host=192.168.249.124:8091,192.168.249.193:8091
-app-stats.couchbase.bucket=appxxxxxx
-app-stats.couchbase.pass=Apxxxxxxxxx
 
 
-CouchBaseUtils.getData("app-stats","key");
-CouchBaseUtils.getObjectData("app-stats","你的key");
+
 
 
 
@@ -107,9 +103,7 @@ Hbase 相关的操作 用pool 下的新版
 ## 已经在使用的项目
 `使用过的 可以将项目git或项目名 记录在下面,方便以后有合理变动时 适当通知下当事人`
 
-* data-api
-* 数据组给portal提供thrift服务的项目
-* 今后rocyuan参与的所有java项目
+
 
 
 ## 发布命令

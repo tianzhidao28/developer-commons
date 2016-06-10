@@ -1,0 +1,66 @@
+/**
+ *
+ * Copyright (c) 2016, rocyuan, admin@rocyuan.com
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package com.rocyuan.commons.utils.beans;
+
+import org.springframework.beans.factory.config.BeanDefinition;
+import org.springframework.context.annotation.AnnotationBeanNameGenerator;
+import org.springframework.util.ClassUtils;
+
+import java.beans.Introspector;
+
+/**
+ * 自动命名 bean name
+ * @author Roc
+ * 	<context:component-scan base-package="cn.itcast.spring0401.jdbc.transaction.annotation"  name-generator="cn.itcast.spring0401.jdbc.transaction.annotation.SpringAnnotationBeanNameGenerator"></context:component-scan>
+ *
+ */
+public class SpringAnnotationBeanNameGenerator extends AnnotationBeanNameGenerator {
+
+
+	@Override
+	protected String buildDefaultBeanName(BeanDefinition definition) {
+		String className = definition.getBeanClassName();
+		if(className.endsWith("ServiceImpl")){
+			String shortName = ClassUtils.getShortName(className.replace("Impl", ""));
+			return Introspector.decapitalize(shortName);
+		}
+		return super.buildDefaultBeanName(definition);
+	}
+
+
+
+//	@Override
+//	protected String determineBeanNameFromAnnotation(
+//			AnnotatedBeanDefinition arg0) {
+//		return super.determineBeanNameFromAnnotation(arg0);
+//	}
+//
+//	@Override
+//	public String generateBeanName(BeanDefinition arg0,
+//			BeanDefinitionRegistry arg1) {
+//		return super.generateBeanName(arg0, arg1);
+//	}
+//
+//	@Override
+//	protected boolean isStereotypeWithNameValue(String annotationType,
+//			Set<String> metaAnnotationTypes, Map<String, Object> attributes) {
+//		return super.isStereotypeWithNameValue(annotationType, metaAnnotationTypes,
+//				attributes);
+//	}
+//
+
+}
